@@ -307,6 +307,61 @@ export class AuthService {
   }
 
   /**
+   * Google OAuth login
+   * - Find user by email
+   * - If exists with LOCAL provider: merge account (update to GOOGLE provider)
+   * - If exists with GOOGLE provider: just generate tokens
+   * - If not exists: create new user
+   * - Return tokens + user info
+   */
+  async googleLogin(googleUser: {
+    email: string;
+    name: string;
+    avatar?: string;
+    providerId: string;
+  }) {
+    let user = await this.usersService.findByEmail(googleUser.email);
+
+    if (user) {
+      // User exists with LOCAL provider -> merge account
+      if (user.provider === 'LOCAL') {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: {
+            provider: 'GOOGLE',
+            providerId: googleUser.providerId,
+            emailVerified: true,
+          },
+        });
+      }
+      // If provider is GOOGLE, just continue to generate tokens
+    } else {
+      // New user -> create with GOOGLE provider
+      user = await this.prisma.user.create({
+        data: {
+          email: googleUser.email,
+          name: googleUser.name,
+          avatar: googleUser.avatar,
+          provider: 'GOOGLE',
+          providerId: googleUser.providerId,
+          emailVerified: true,
+          password: null,
+        },
+      });
+    }
+
+    // Generate tokens
+    const tokens = await this.generateTokens(user.id, user.email);
+
+    // Return tokens + user info (without password)
+    const { password, ...userWithoutPassword } = user;
+    return {
+      ...tokens,
+      user: userWithoutPassword,
+    };
+  }
+
+  /**
    * Reset password using JWT token
    * - Verify token and check type is 'reset-password'
    * - Hash new password and update in DB
