@@ -20,8 +20,6 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
 @ApiTags('Users')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -32,11 +30,15 @@ export class UsersController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   getProfile(@CurrentUser('id') userId: string) {
     return this.usersService.getProfile(userId);
   }
 
   @Patch('me')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   updateProfile(
     @CurrentUser('id') userId: string,
     @Body() dto: UpdateProfileDto,
@@ -45,6 +47,8 @@ export class UsersController {
   }
 
   @Patch('me/password')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   changePassword(
     @CurrentUser('id') userId: string,
     @Body() dto: ChangePasswordDto,
@@ -53,6 +57,8 @@ export class UsersController {
   }
 
   @Post('me/avatar')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {

@@ -8,10 +8,8 @@ export class UpdateProfileDto {
   @IsOptional()
   name?: string;
 
-  @ApiPropertyOptional({ example: '/uploads/avatars/avatar.jpg' })
-  @IsString()
-  @IsOptional()
-  avatar?: string;
+  // avatar is NOT here — only set via POST /users/me/avatar (file upload)
+  // Allowing arbitrary string would enable path traversal attacks
 
   @ApiPropertyOptional({ enum: Theme, example: Theme.DARK })
   @IsEnum(Theme)

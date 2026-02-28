@@ -22,21 +22,15 @@ export class EmailService {
 
   /**
    * Send an email using nodemailer
-   * Returns true if sent successfully, false otherwise
+   * Throws error on failure - caller decides how to handle
    */
-  async sendMail(to: string, subject: string, html: string): Promise<boolean> {
-    try {
-      await this.transporter.sendMail({
-        from: this.configService.get<string>('EMAIL_FROM'),
-        to,
-        subject,
-        html,
-      });
-      this.logger.log(`Email sent to ${to}`);
-      return true;
-    } catch (error) {
-      this.logger.error(`Failed to send email to ${to}`, error.message);
-      return false;
-    }
+  async sendMail(to: string, subject: string, html: string): Promise<void> {
+    await this.transporter.sendMail({
+      from: this.configService.get<string>('EMAIL_FROM'),
+      to,
+      subject,
+      html,
+    });
+    this.logger.log(`Email sent to ${to}`);
   }
 }
