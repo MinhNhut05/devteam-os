@@ -45,7 +45,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
     // Create user in database
-    const user = await this.prisma.user.create({
+    const created = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hashedPassword,
@@ -55,14 +55,14 @@ export class AuthService {
 
     // Send verification email (don't block registration if email fails)
     try {
-      await this.sendVerificationEmail(user.email);
+      await this.sendVerificationEmail(created.email);
     } catch (error) {
-      this.logger.error(`Failed to send verification email to ${user.email}`, error.message);
+      this.logger.error(`Failed to send verification email to ${created.email}`, error.message);
     }
 
     // Return user without password
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    const { password, ...user } = created;
+    return user;
   }
 
   /**
@@ -181,8 +181,8 @@ export class AuthService {
       matchedToken.user.email,
     );
 
-    // Return new access token + user info (without password)
-    const { password, ...userWithoutPassword } = matchedToken.user;
+    // Return tokens + user info (without password)
+    const { password: _pw, ...userWithoutPassword } = matchedToken.user;
     return {
       ...tokens,
       user: userWithoutPassword,
@@ -209,9 +209,10 @@ export class AuthService {
    * - Send email with verification link to frontend
    */
   private async sendVerificationEmail(email: string) {
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
     const token = this.jwtService.sign(
       { email, type: 'verify-email' },
-      { expiresIn: '24h' },
+      { secret: `${jwtSecret}_verify`, expiresIn: '24h' },
     );
 
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
@@ -239,29 +240,33 @@ export class AuthService {
    * - Find user by email and set emailVerified = true
    */
   async verifyEmail(token: string) {
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+
+    let payload: any;
     try {
-      const payload = this.jwtService.verify(token);
-
-      if (payload.type !== 'verify-email') {
-        throw new BadRequestException('Token khong hop le');
-      }
-
-      const user = await this.usersService.findByEmail(payload.email);
-      if (!user) {
-        throw new BadRequestException('User khong ton tai');
-      }
-
-      // Update emailVerified to true
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: { emailVerified: true },
+      payload = this.jwtService.verify(token, {
+        secret: `${jwtSecret}_verify`,
       });
-
-      return { message: 'Email da duoc xac nhan' };
-    } catch (error) {
-      if (error instanceof BadRequestException) throw error;
+    } catch {
       throw new BadRequestException('Token khong hop le hoac da het han');
     }
+
+    if (payload.type !== 'verify-email') {
+      throw new BadRequestException('Token khong hop le');
+    }
+
+    const user = await this.usersService.findByEmail(payload.email);
+    if (!user) {
+      throw new BadRequestException('User khong ton tai');
+    }
+
+    // Update emailVerified to true
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: true },
+    });
+
+    return { message: 'Email da duoc xac nhan' };
   }
 
   /**
@@ -274,9 +279,10 @@ export class AuthService {
 
     // If user exists, send reset email
     if (user) {
+      const jwtSecret = this.configService.get<string>('JWT_SECRET');
       const token = this.jwtService.sign(
         { email, type: 'reset-password' },
-        { expiresIn: '1h' },
+        { secret: `${jwtSecret}_reset`, expiresIn: '1h' },
       );
 
       const frontendUrl = this.configService.get<string>('FRONTEND_URL');
@@ -324,7 +330,7 @@ export class AuthService {
     if (user) {
       // User exists with LOCAL provider -> merge account
       if (user.provider === 'LOCAL' && !user.providerId) {
-        user = await this.prisma.user.update({
+        const updated = await this.prisma.user.update({
           where: { id: user.id },
           data: {
             // Keep provider as LOCAL, just save the providerId to link accounts
@@ -332,11 +338,13 @@ export class AuthService {
             emailVerified: true,
           },
         });
+        const { password: _pw, ...rest } = updated;
+        user = rest;
       }
       // If provider is GOOGLE, or LOCAL and already linked, continue to generate tokens
     } else {
       // New user -> create with GOOGLE provider
-      user = await this.prisma.user.create({
+      const created = await this.prisma.user.create({
         data: {
           email: googleUser.email,
           name: googleUser.name,
@@ -347,16 +355,16 @@ export class AuthService {
           password: null,
         },
       });
+      const { password: _pw, ...rest } = created;
+      user = rest;
     }
 
     // Generate tokens
     const tokens = await this.generateTokens(user.id, user.email);
 
-    // Return tokens + user info (without password)
-    const { password: _pw, ...userWithoutPassword } = user as any;
     return {
       ...tokens,
-      user: userWithoutPassword,
+      user,
     };
   }
 
@@ -367,37 +375,41 @@ export class AuthService {
    * - Revoke all refresh tokens (force re-login)
    */
   async resetPassword(token: string, newPassword: string) {
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+
+    let payload: any;
     try {
-      const payload = this.jwtService.verify(token);
-
-      if (payload.type !== 'reset-password') {
-        throw new BadRequestException('Token khong hop le');
-      }
-
-      const user = await this.usersService.findByEmail(payload.email);
-      if (!user) {
-        throw new BadRequestException('User khong ton tai');
-      }
-
-      // Hash new password
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-      // Update password in DB
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: { password: hashedPassword },
+      payload = this.jwtService.verify(token, {
+        secret: `${jwtSecret}_reset`,
       });
-
-      // Revoke all refresh tokens (force user to login again)
-      await this.prisma.refreshToken.updateMany({
-        where: { userId: user.id, revoked: false },
-        data: { revoked: true },
-      });
-
-      return { message: 'Mat khau da duoc dat lai' };
-    } catch (error) {
-      if (error instanceof BadRequestException) throw error;
+    } catch {
       throw new BadRequestException('Token khong hop le hoac da het han');
     }
+
+    if (payload.type !== 'reset-password') {
+      throw new BadRequestException('Token khong hop le');
+    }
+
+    const user = await this.usersService.findByEmail(payload.email);
+    if (!user) {
+      throw new BadRequestException('User khong ton tai');
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update password in DB
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    // Revoke all refresh tokens (force user to login again)
+    await this.prisma.refreshToken.updateMany({
+      where: { userId: user.id, revoked: false },
+      data: { revoked: true },
+    });
+
+    return { message: 'Mat khau da duoc dat lai' };
   }
 }
