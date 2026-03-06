@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import api from '@/services/api';
 import { useAuthStore } from '@/stores/auth.store';
+import { useThemeStore } from '@/stores/theme.store';
 
 interface UpdateProfileDto {
   name?: string;
@@ -22,16 +23,20 @@ interface User {
 
 export function useUpdateProfile() {
   const updateUser = useAuthStore((state) => state.updateUser);
+  const setTheme = useThemeStore((state) => state.setTheme);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: UpdateProfileDto) => {
-      const response = await api.patch<{ user: User }>('/users/me', data);
+      const response = await api.patch<User>('/users/me', data);
       return response.data;
     },
     onSuccess: (data) => {
-      updateUser(data.user);
+      updateUser(data);
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      // Sync theme store so App.tsx picks up the change
+      const themeMap = { LIGHT: 'light', DARK: 'dark', SYSTEM: 'system' } as const;
+      setTheme(themeMap[data.theme]);
       toast.success('Cập nhật thông tin thành công!');
     },
     onError: (error: unknown) => {
