@@ -5,6 +5,18 @@
 
 ---
 
+## Reading order nhanh
+
+| Tinh huong | Thu tu doc de xuat |
+|------------|--------------------|
+| Session moi | `STATE.md` → `ROADMAP.md` (neu can biet tong quan) |
+| Plan / thao luan | `STATE.md` → `PROJECT.md` → `REQUIREMENTS.md` → `ROADMAP.md` → `DECISIONS.md` |
+| Code tren branch | `STATE.md` → `branches/XX/CONTEXT.md` → `branches/XX/PLAN.md` → `branches/XX/TODO.md` → `specs/0X-*.md` |
+| Review / verify | `STATE.md` → `branches/XX/VERIFICATION.md` → `specs/0X-*.md` → `REQUIREMENTS.md` |
+| Debug | `STATE.md` → `research/PITFALLS.md` → `codebase/STRUCTURE.md` → `codebase/CONVENTIONS.md` |
+
+---
+
 ## Buoc 1: Doc STATE.md (BAT BUOC)
 
 ```
@@ -18,6 +30,24 @@ File nay cho biet:
 - Session truoc dung o dau
 
 > **Neu chi doc 1 file duy nhat, doc file nay.**
+
+---
+
+## Source of truth
+
+| Can biet gi | File uu tien doc |
+|-------------|-------------------|
+| Trang thai hien tai / session moi nhat | `STATE.md` |
+| Vision, muc tieu, stack tong quan | `PROJECT.md` |
+| Architecture, patterns, DB schema | `ARCHITECTURE.md` |
+| Requirement chinh thuc va status | `REQUIREMENTS.md` |
+| Tien do phase / roadmap tong the | `ROADMAP.md` |
+| Workflow branch / commit / merge | `WORKFLOW.md` |
+| Quy trinh dieu phoi T1 | `ORCHESTRATOR.md` |
+| Scope va rules cua 1 branch cu the | `branches/XX/CONTEXT.md` |
+| Ke hoach thuc thi cua branch | `branches/XX/PLAN.md` |
+| Cau truc code thuc te | `codebase/STRUCTURE.md` |
+| Coding conventions / pitfalls | `research/CONVENTIONS.md`, `research/PITFALLS.md` |
 
 ---
 
@@ -104,38 +134,57 @@ Truoc khi ket thuc session, cap nhat cac file sau:
 .context/
 ├── STATE.md            ★ Doc dau tien, moi session
 ├── PROJECT.md          ○ Vision, tech stack
-├── REQUIREMENTS.md     ○ 78 requirement IDs
+├── REQUIREMENTS.md     ○ Requirement IDs + status chinh thuc
 ├── ARCHITECTURE.md     ○ Patterns, DB schema
 ├── COMMANDS.md         ○ Dev commands, env vars
 ├── WORKFLOW.md         ○ Branch, commit conventions
 ├── ROADMAP.md          ○ Phases + progress
-├── DECISIONS.md        ○ Decision log
+├── DECISIONS.md        ○ Decision log (append-only)
 ├── LEARNING.md         ○ Learning mode rules
 ├── ORCHESTRATOR.md     ★ Doc khi lam T1 (chat chinh)
-├── ONBOARDING.md       ★ File nay — doc 1 lan
+├── CHEATSHEET.md       ○ Workflow nhanh cho Claude Code
+├── ONBOARDING.md       ★ File nay — map + huong dan vao context
 │
-├── research/           ◆ Nghien cuu, doc khi can
+├── research/           ◆ Kien thuc nen, doc truoc khi code neu can
 │   ├── STACK.md
 │   ├── PITFALLS.md
 │   └── CONVENTIONS.md
 │
-├── codebase/           ◆ Map code, doc khi can
+├── codebase/           ◆ Map codebase thuc te
 │   ├── STRUCTURE.md
 │   ├── CONVENTIONS.md
 │   └── CONCERNS.md
 │
-├── specs/              ◆ Feature specs, doc khi code feature
+├── specs/              ◆ Feature specs theo domain
+│   ├── overview.md
 │   └── 0X-*.md
 │
 ├── branches/           ◆ Branch context, doc khi code branch
+│   ├── README.md
 │   ├── _TEMPLATE/
-│   └── XX-*/
+│   ├── XX-*/
+│   └── XX/
 │
-├── todos/              ◇ Quick ideas
-└── debug/              ◇ Debug sessions
+├── todos/              ◇ Quick ideas / pending items
+└── debug/              ◇ Debug sessions / hypothesis logs
 ```
 
 **Legend:** ★ = luon doc | ○ = doc khi can | ◆ = doc theo task | ◇ = dung khi phat sinh
+
+### Ghi chu map
+
+- `CHEATSHEET.md` nghieng ve thao tac nhanh / workflow, khong thay the `STATE.md`.
+- `specs/overview.md` la overview cua phan specs / project scope, **khong** phai index chinh cua toan bo `.context/`.
+- `branches/_TEMPLATE/` chua cac mau file cho branch context moi.
+- Trong `branches/` hien co the ton tai song song dang ten `XX-*/` va `XX/`; can doc dung folder branch dang duoc su dung.
+
+---
+
+## Legacy notes
+
+- Chuan hien tai cua project la duong dan **`.context/...`**.
+- Neu gap reference dang `context/...` hoac `context/overview.md`, xem do la **dau vet cu / legacy reference**.
+- Khi doc va cap nhat tai lieu moi, uu tien dung `.context/...` de tranh nham lan.
 
 ---
 

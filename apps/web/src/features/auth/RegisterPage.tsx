@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import toast from 'react-hot-toast';
-import api from '@/services/api';
+import { useRegister } from '@/hooks/useRegister';
 
 const registerSchema = z
   .object({
@@ -23,8 +22,7 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const registerMutation = useRegister();
 
   const {
     register,
@@ -34,31 +32,17 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterForm) => {
-    setIsLoading(true);
-    try {
-      await api.post('/auth/register', {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
-      toast.success('Đăng ký thành công! Vui lòng đăng nhập.');
-      navigate('/login');
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || 'Đăng ký thất bại';
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (data: RegisterForm) => {
+    registerMutation.mutate({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        Đăng ký tài khoản
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Đăng ký tài khoản</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
@@ -72,9 +56,7 @@ export default function RegisterPage() {
             className="input"
             placeholder="Nguyễn Văn A"
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
-          )}
+          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
         </div>
 
         <div>
@@ -88,9 +70,7 @@ export default function RegisterPage() {
             className="input"
             placeholder="you@example.com"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -110,11 +90,7 @@ export default function RegisterPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
           {errors.password && (
@@ -134,14 +110,12 @@ export default function RegisterPage() {
             placeholder="••••••••"
           />
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.confirmPassword.message}
-            </p>
+            <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
           )}
         </div>
 
-        <button type="submit" disabled={isLoading} className="btn-primary w-full">
-          {isLoading ? (
+        <button type="submit" disabled={registerMutation.isPending} className="btn-primary w-full">
+          {registerMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Đang đăng ký...
@@ -154,10 +128,7 @@ export default function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Đã có tài khoản?{' '}
-        <Link
-          to="/login"
-          className="text-indigo-600 hover:text-indigo-500 font-medium"
-        >
+        <Link to="/login" className="text-indigo-600 hover:text-indigo-500 font-medium">
           Đăng nhập
         </Link>
       </p>
