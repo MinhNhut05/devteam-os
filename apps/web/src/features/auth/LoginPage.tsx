@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import { useAuthStore } from '@/stores/auth.store';
-import toast from 'react-hot-toast';
-import api from '@/services/api';
+import { useLogin } from '@/hooks/useLogin';
+import GoogleLoginButton from '@/features/auth/components/GoogleLoginButton';
 
 const loginSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -17,8 +16,11 @@ type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const loginMutation = useLogin();
+  const location = useLocation();
+
+  // Show message if redirected from register
+  const fromRegister = location.state?.fromRegister;
 
   const {
     register,
@@ -28,28 +30,19 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginForm) => {
-    setIsLoading(true);
-    try {
-      const response = await api.post('/auth/login', data);
-      const { user, accessToken } = response.data;
-      setAuth(user, accessToken);
-      toast.success('Đăng nhập thành công!');
-    } catch (error: unknown) {
-      const message =
-        (error as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message || 'Đăng nhập thất bại';
-      toast.error(message);
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (data: LoginForm) => {
+    loginMutation.mutate(data);
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        Đăng nhập
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Đăng nhập</h2>
+
+      {fromRegister && (
+        <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-sm text-green-700 dark:text-green-300">
+          Đăng ký thành công! Vui lòng đăng nhập.
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
@@ -63,9 +56,7 @@ export default function LoginPage() {
             className="input"
             placeholder="you@example.com"
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -85,11 +76,7 @@ export default function LoginPage() {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
           {errors.password && (
@@ -97,8 +84,17 @@ export default function LoginPage() {
           )}
         </div>
 
-        <button type="submit" disabled={isLoading} className="btn-primary w-full">
-          {isLoading ? (
+        <div className="flex justify-end">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+          >
+            Quên mật khẩu?
+          </Link>
+        </div>
+
+        <button type="submit" disabled={loginMutation.isPending} className="btn-primary w-full">
+          {loginMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               Đang đăng nhập...
@@ -115,32 +111,16 @@ export default function LoginPage() {
             <div className="w-full border-t border-gray-300 dark:border-gray-600" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
-              hoặc
-            </span>
+            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">hoặc</span>
           </div>
         </div>
 
-        <button
-          type="button"
-          className="mt-4 w-full btn-secondary"
-          onClick={() => toast.error('Google OAuth chưa được cấu hình')}
-        >
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google"
-            className="w-5 h-5 mr-2"
-          />
-          Đăng nhập với Google
-        </button>
+        <GoogleLoginButton />
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Chưa có tài khoản?{' '}
-        <Link
-          to="/register"
-          className="text-indigo-600 hover:text-indigo-500 font-medium"
-        >
+        <Link to="/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
           Đăng ký ngay
         </Link>
       </p>

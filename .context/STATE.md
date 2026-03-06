@@ -10,9 +10,9 @@ See: .context/PROJECT.md
 
 Phase: 1 of 7 (Auth & User)
 Branch: `02-feat-auth-fe`
-Status: Backend auth hardened and validated, frontend auth branch dang tiep tuc
-Last activity: 2026-03-06 — Fix 7 auth security issues, tao Prisma migration, dang them regression tests
-Progress: [####________________] 20%
+Status: Frontend auth DONE — 5 phases hoan thanh, san sang commit + merge
+Last activity: 2026-03-07 — Hoan thanh toan bo auth frontend (login, register, forgot/reset password, verify email, profile, change password)
+Progress: [########____________] 40%
 
 ## What's Done (Phase 1 BE)
 
@@ -26,14 +26,25 @@ Progress: [####________________] 20%
 - Google OAuth token-in-URL removed: redirect one-time code + backend exchange endpoint
 - Refresh token cleanup + refresh rotation transaction + DB indexes applied via Prisma migration
 
+## What's Done (Phase 1 FE — branch 02)
+
+- Auth store (Zustand + persist, isHydrated, no accessToken persist)
+- API interceptor (auto refresh, failedQueue, withCredentials)
+- TanStack Query hooks: useLogin, useRegister, useLogout, useCurrentUser, useForgotPassword, useResetPassword, useVerifyEmail, useUpdateProfile, useChangePassword
+- Route guards: ProtectedRoute, PublicRoute (isHydrated flash prevention)
+- Pages: LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, VerifyEmailPage, ProfilePage, ChangePasswordPage
+- GoogleLoginButton component
+- App.tsx routing: all auth routes wired
+
 ## What's Next
 
-1. Hoan thanh auth regression tests cho refresh/reset/google exchange
-2. Tiep tuc 02-feat-auth-fe: LoginPage, RegisterPage, auth.store
+1. Commit branch 02-feat-auth-fe
+2. Merge 02 vao main
+3. Tiep tuc branch 03 (Workspace + Project management)
 
 ## Blockers/Concerns
 
-- Chua co test coverage auth day du; dang bo sung regression tests
+- None — branch 02 san sang commit
 
 ## Accumulated Decisions
 
@@ -44,6 +55,13 @@ Progress: [####________________] 20%
 - Auth hardening session: NestJS CacheModule cho Google one-time code exchange + strict throttling (2026-03-06)
 
 ## Session Log
+
+### 2026-03-07
+
+- Fix Phase 3 critical issues: extract useVerifyEmail hook, fix infinite spinner, fix silent fail
+- Phase 4: ProfilePage + ChangePasswordPage (useUpdateProfile, useChangePassword hooks)
+- Phase 5: Integrate all pages vao App.tsx, run arch-checker + reviewer
+- All phases DONE, san sang commit
 
 ### 2026-03-06
 
@@ -67,4 +85,4 @@ Progress: [####________________] 20%
 ---
 
 *This file must stay under 100 lines. Move old entries to archive when needed.*
-*Last updated: 2026-03-06*
+*Last updated: 2026-03-07*

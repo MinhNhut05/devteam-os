@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthStore } from '@/stores/auth.store';
 import { useThemeStore } from '@/stores/theme.store';
 import { useEffect } from 'react';
 
@@ -7,34 +6,23 @@ import { useEffect } from 'react';
 import AuthLayout from '@/layouts/AuthLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
+// Route guards
+import ProtectedRoute from '@/components/ProtectedRoute';
+import PublicRoute from '@/components/PublicRoute';
+
 // Auth pages
 import LoginPage from '@/features/auth/LoginPage';
 import RegisterPage from '@/features/auth/RegisterPage';
+import ForgotPasswordPage from '@/features/auth/pages/ForgotPasswordPage';
+import ResetPasswordPage from '@/features/auth/pages/ResetPasswordPage';
+import VerifyEmailPage from '@/features/auth/pages/VerifyEmailPage';
+import ProfilePage from '@/features/auth/pages/ProfilePage';
+import ChangePasswordPage from '@/features/auth/pages/ChangePasswordPage';
 
 // Main pages (placeholders)
 import DashboardPage from '@/features/dashboard/DashboardPage';
 import ProjectsPage from '@/features/projects/ProjectsPage';
 import KanbanPage from '@/features/kanban/KanbanPage';
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-}
-
-function PublicRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <>{children}</>;
-}
 
 function App() {
   const theme = useThemeStore((state) => state.theme);
@@ -57,7 +45,7 @@ function App() {
 
   return (
     <Routes>
-      {/* Public routes */}
+      {/* Public routes — redirect to / if already logged in */}
       <Route element={<AuthLayout />}>
         <Route
           path="/login"
@@ -75,9 +63,20 @@ function App() {
             </PublicRoute>
           }
         />
+        {/* Email-related routes */}
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPasswordPage />
+            </PublicRoute>
+          }
+        />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
       </Route>
 
-      {/* Protected routes */}
+      {/* Protected routes — redirect to /login if not authenticated */}
       <Route
         element={
           <ProtectedRoute>
@@ -88,6 +87,8 @@ function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:projectId/kanban" element={<KanbanPage />} />
+        <Route path="/settings/profile" element={<ProfilePage />} />
+        <Route path="/settings/password" element={<ChangePasswordPage />} />
       </Route>
 
       {/* Fallback */}
