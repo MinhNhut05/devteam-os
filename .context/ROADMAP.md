@@ -9,17 +9,17 @@
 | Phase | Mo ta | Spec file | Branches | Trang thai | % |
 |-------|-------|-----------|----------|------------|---|
 | Phase 0 | Chuan bi (hoc, setup, thao luan) | - | `00-chore-foundation` | **Xong** | 100% |
-| Phase 1 | Auth & User | `specs/01-auth-user.md` | `01-auth-be`, `02-auth-fe` | **Dang lam** | 40% |
-| Phase 2 | Workspace & Team | `specs/02-workspace-team.md` | `03-workspace-be`, `04-workspace-fe` | Chua bat dau | 0% |
+| Phase 1 | Auth & User | `specs/01-auth-user.md` | `01-auth-be`, `02-auth-fe` | **Xong** | 100% |
+| Phase 2 | Workspace & Team | `specs/02-workspace-team.md` | `03-workspace-be`, `04-workspace-fe` | **Xong** | 100% |
 | Phase 3 | Project, Task & AI | `specs/03-project-task-ai.md` | `05-project-task-be`, `06-project-task-fe`, `07-ai-be`, `08-ai-fe` | Chua bat dau | 0% |
 | Phase 4 | Kanban Board | `specs/04-kanban.md` | `09-kanban-fe` | Chua bat dau | 0% |
 | Phase 5 | Comments & Real-time | `specs/05-comments-realtime.md` | `10-realtime-be`, `11-realtime-fe` | Chua bat dau | 0% |
 | Phase 6 | Dashboard & Reports | `specs/06-dashboard-reports.md` | `12-dashboard-be`, `13-dashboard-fe` | Chua bat dau | 0% |
 | Phase 7 | Polish & Deploy | - | `14-polish`, `15-deploy` | Chua bat dau | 0% |
 
-**Tien do tong the: 12%**
+**Tien do tong the: 30%**
 
-**Progress: [##__________________] 12%**
+**Progress: [######______________] 30%**
 
 ---
 
@@ -40,42 +40,42 @@
 
 ---
 
-## Phase 1: Auth & User — DANG LAM
+## Phase 1: Auth & User — XONG
 
 > Requirements: AUTH-01..AUTH-13
 > Branches: `01-feat-auth-be`, `02-feat-auth-fe`
 
-### Backend (01-feat-auth-be) — Dang lam
+### Backend (01-feat-auth-be) — Xong
 
 - [x] Auth module setup + DTOs (AUTH-01)
 - [x] Register + Login voi JWT (AUTH-01, AUTH-02)
 - [x] Refresh token rotation + Logout (AUTH-03, AUTH-04)
 - [x] Email verification + Password reset (AUTH-06, AUTH-07, AUTH-08)
 - [x] Google OAuth login voi account merging (AUTH-05)
-- [ ] Users module: profile, change password, upload avatar (AUTH-09, AUTH-10, AUTH-11)
-- [ ] Auth guards + CurrentUser decorator (AUTH-12, AUTH-13)
+- [x] Users module: profile, change password, upload avatar (AUTH-09, AUTH-10, AUTH-11)
+- [x] Auth guards + CurrentUser decorator (AUTH-12, AUTH-13)
 
-### Frontend (02-feat-auth-fe) — Chua bat dau
+### Frontend (02-feat-auth-fe) — Xong
 
-- [ ] LoginPage + RegisterPage
-- [ ] ForgotPasswordPage + ResetPasswordPage
-- [ ] auth.store.ts + api.ts (axios interceptor)
-- [ ] ProtectedRoute component
+- [x] LoginPage + RegisterPage
+- [x] ForgotPasswordPage + ResetPasswordPage
+- [x] auth.store.ts + api.ts (axios interceptor)
+- [x] ProtectedRoute component
 
 ---
 
-## Phase 2: Workspace & Team
+## Phase 2: Workspace & Team — XONG
 
 > Requirements: WS-01..WS-14
 > Branches: `03-feat-workspace-be`, `04-feat-workspace-fe`
 
-- [ ] Workspace CRUD API (WS-01..WS-04)
-- [ ] Members management API (WS-05..WS-09)
-- [ ] Invitation flow - email + join link (WS-06, WS-07)
-- [ ] Workspace role guard (WS-10, WS-11)
-- [ ] Frontend: WorkspaceListPage, SettingsPage (WS-12)
-- [ ] Frontend: MembersPage, JoinInvitationPage (WS-13)
-- [ ] Frontend: WorkspaceSwitcher (WS-14)
+- [x] Workspace CRUD API (WS-01..WS-04)
+- [x] Members management API (WS-05..WS-09)
+- [x] Invitation flow - email + join link (WS-06, WS-07)
+- [x] Workspace role guard (WS-10, WS-11)
+- [x] Frontend: WorkspaceListPage, SettingsPage (WS-12)
+- [x] Frontend: MembersPage, JoinInvitationPage (WS-13)
+- [x] Frontend: WorkspaceSwitcher (WS-14)
 
 ---
 
