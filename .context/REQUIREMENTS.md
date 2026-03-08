@@ -36,9 +36,9 @@
 - [x] **WS-09**: Doi role member (OWNER, ADMIN)
 - [x] **WS-10**: Phan quyen 4 roles: OWNER, ADMIN, MEMBER, VIEWER
 - [x] **WS-11**: Workspace role guard kiem tra quyen truoc moi action
-- [ ] **WS-12**: Frontend WorkspaceListPage + WorkspaceSettingsPage
-- [ ] **WS-13**: Frontend MembersPage + JoinInvitationPage
-- [ ] **WS-14**: Frontend WorkspaceSwitcher dropdown o header
+- [x] **WS-12**: Frontend WorkspaceListPage + WorkspaceSettingsPage
+- [x] **WS-13**: Frontend MembersPage + JoinInvitationPage
+- [x] **WS-14**: Frontend WorkspaceSwitcher dropdown o header
 
 ### Project (PROJ)
 
