@@ -4,7 +4,7 @@
  */
 export default function GoogleLoginButton() {
   const handleGoogleLogin = () => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
     window.location.href = `${apiUrl}/auth/google`;
   };
 

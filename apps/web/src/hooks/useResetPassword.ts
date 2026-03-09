@@ -5,7 +5,7 @@ import api from '@/services/api';
 
 interface ResetPasswordDto {
   token: string;
-  password: string;
+  newPassword: string;
 }
 
 export function useResetPassword() {
