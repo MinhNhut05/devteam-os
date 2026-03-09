@@ -34,7 +34,7 @@ export default function ResetPasswordPage() {
 
   const onSubmit = (data: ResetPasswordForm) => {
     if (!token) return;
-    resetPasswordMutation.mutate({ token, password: data.password });
+    resetPasswordMutation.mutate({ token, newPassword: data.password });
   };
 
   // Token không tồn tại → hiện error thay vì form vô nghĩa
