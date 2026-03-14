@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AlertCircle, FolderKanban, Plus } from 'lucide-react';
 import CreateProjectModal from '@/features/projects/CreateProjectModal';
 import { useProjects } from '@/hooks/useProjects';
+import { resolveApiAssetUrl } from '@/services/api';
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Đang hoạt động',
@@ -58,7 +59,7 @@ export default function ProjectListPage() {
           {Array.from({ length: 6 }).map((_, index) => (
             <div key={index} className="card p-5 animate-pulse">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-4 h-4 rounded-full bg-gray-200 dark:bg-gray-700 mt-1" />
+                <div className="h-10 w-10 rounded-xl bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
                 <div className="flex-1">
                   <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-2" />
                   <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2" />
@@ -98,10 +99,22 @@ export default function ProjectListPage() {
               className="card p-5 text-left hover:ring-2 hover:ring-indigo-500 hover:shadow-md transition-all cursor-pointer"
             >
               <div className="flex items-start gap-3 mb-4">
-                <div
-                  className="w-4 h-4 rounded-full mt-1 flex-shrink-0"
-                  style={{ backgroundColor: project.color }}
-                />
+                {project.image ? (
+                  <img
+                    src={resolveApiAssetUrl(project.image) ?? project.image}
+                    alt={project.name}
+                    className="h-10 w-10 rounded-xl border border-gray-200 object-cover flex-shrink-0 dark:border-gray-700"
+                  />
+                ) : project.icon ? (
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-gray-50 text-xl flex-shrink-0 dark:border-gray-700 dark:bg-gray-900">
+                    {project.icon}
+                  </div>
+                ) : (
+                  <div
+                    className="h-10 w-10 rounded-xl flex-shrink-0"
+                    style={{ backgroundColor: project.color }}
+                  />
+                )}
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 dark:text-white truncate">{project.name}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 min-h-10">

@@ -1,14 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, X } from 'lucide-react';
+import ColorPresetPicker from '@/components/ColorPresetPicker';
+import ProjectIconPicker from '@/components/ProjectIconPicker';
 import { useCreateProject } from '@/hooks/useCreateProject';
 
 const createProjectSchema = z.object({
   name: z.string().min(2, 'Tên tối thiểu 2 ký tự').max(80, 'Tên tối đa 80 ký tự'),
   description: z.string().max(500, 'Mô tả tối đa 500 ký tự').optional(),
   color: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Màu không hợp lệ'),
+  icon: z.string().nullable().optional(),
 });
 
 type CreateProjectForm = z.infer<typeof createProjectSchema>;
@@ -25,10 +28,13 @@ export default function CreateProjectModal({
   onClose,
 }: CreateProjectModalProps) {
   const createProject = useCreateProject();
+  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<CreateProjectForm>({
     resolver: zodResolver(createProjectSchema),
@@ -36,14 +42,23 @@ export default function CreateProjectModal({
       name: '',
       description: '',
       color: '#6366f1',
+      icon: null,
     },
   });
+
+  const currentColor = watch('color');
 
   useEffect(() => {
     if (!isOpen) {
       reset();
+      setSelectedIcon(null);
     }
   }, [isOpen, reset]);
+
+  const handleIconChange = (icon: string | null) => {
+    setSelectedIcon(icon);
+    setValue('icon', icon);
+  };
 
   const onSubmit = (data: CreateProjectForm) => {
     createProject.mutate(
@@ -53,6 +68,7 @@ export default function CreateProjectModal({
           name: data.name,
           description: data.description?.trim() || undefined,
           color: data.color,
+          icon: data.icon ?? undefined,
         },
       },
       {
@@ -69,7 +85,7 @@ export default function CreateProjectModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
 
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+      <div className="relative max-h-[90vh] w-full max-w-lg mx-4 overflow-y-auto rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white">Tạo dự án mới</h2>
           <button
@@ -80,7 +96,16 @@ export default function CreateProjectModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* Icon picker */}
+          <div>
+            <ProjectIconPicker
+              currentIcon={selectedIcon}
+              currentImage={null}
+              onIconChange={handleIconChange}
+            />
+          </div>
+
           <div>
             <label htmlFor="project-name" className="label">
               Tên dự án
@@ -111,17 +136,13 @@ export default function CreateProjectModal({
             )}
           </div>
 
+          {/* Color preset picker */}
           <div>
-            <label htmlFor="project-color" className="label">
-              Màu đại diện
-            </label>
-            <input
-              id="project-color"
-              type="color"
-              {...register('color')}
-              className="h-11 w-20 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+            <label className="label">Màu đại diện</label>
+            <ColorPresetPicker
+              value={currentColor}
+              onChange={(color) => setValue('color', color)}
             />
-            {errors.color && <p className="mt-1 text-sm text-red-500">{errors.color.message}</p>}
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
