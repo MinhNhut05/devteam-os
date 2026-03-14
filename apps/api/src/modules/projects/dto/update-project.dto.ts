@@ -50,4 +50,14 @@ export class UpdateProjectDto {
   @IsEnum(ProjectStatus, { message: 'Status must be ACTIVE, COMPLETED, or ARCHIVED' })
   @IsOptional()
   status?: ProjectStatus;
+
+  @ApiProperty({
+    example: '/uploads/projects/1234567890.png',
+    description: 'Duong dan anh dai dien project (null de xoa anh)',
+    required: false,
+    nullable: true,
+  })
+  @IsString({ message: 'Image must be a string' })
+  @IsOptional()
+  image?: string | null;
 }

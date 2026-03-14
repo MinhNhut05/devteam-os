@@ -8,6 +8,7 @@ export interface Project {
   description: string | null;
   color: string;
   icon: string | null;
+  image: string | null;
   status: 'ACTIVE' | 'COMPLETED' | 'ARCHIVED';
   createdAt: string;
   updatedAt: string;

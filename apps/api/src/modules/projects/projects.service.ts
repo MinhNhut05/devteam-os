@@ -104,6 +104,7 @@ export class ProjectsService {
       where: { id },
       select: {
         id: true,
+        image: true,
         tasks: {
           select: {
             attachments: {
@@ -127,6 +128,12 @@ export class ProjectsService {
 
     // Thu thap tat ca attachment paths (tasks + subtasks)
     const filePaths: string[] = [];
+
+    // Them project image vao danh sach can unlink
+    if (project.image?.startsWith('/uploads/')) {
+      filePaths.push(project.image);
+    }
+
     for (const task of project.tasks) {
       for (const att of task.attachments) {
         filePaths.push(att.path);
@@ -156,6 +163,42 @@ export class ProjectsService {
     await this.prisma.project.delete({ where: { id } });
 
     return { message: 'Project deleted successfully' };
+  }
+
+  /**
+   * Upload anh dai dien cho project.
+   * Neu project da co anh cu (luu tren server), xoa file tren disk truoc.
+   * Bam pattern workspacesService.uploadLogo().
+   */
+  async uploadImage(id: string, file: Express.Multer.File) {
+    const project = await this.prisma.project.findUnique({
+      where: { id },
+      select: { image: true },
+    });
+
+    if (!project) {
+      throw new NotFoundException('Project not found');
+    }
+
+    // Xoa anh cu tren disk neu la file da upload (bat dau bang /uploads/)
+    if (project.image?.startsWith('/uploads/')) {
+      const uploadDir = path.resolve(process.cwd(), process.env.UPLOAD_DIR || './uploads');
+      const relPath = project.image.slice('/uploads/'.length);
+      const oldPath = path.resolve(uploadDir, relPath);
+
+      if (oldPath.startsWith(`${uploadDir}${path.sep}`) && fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+    }
+
+    const imagePath = `/uploads/projects/${file.filename}`;
+
+    await this.prisma.project.update({
+      where: { id },
+      data: { image: imagePath },
+    });
+
+    return { image: imagePath };
   }
 
   /**
