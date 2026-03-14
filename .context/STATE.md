@@ -11,7 +11,7 @@ See: .context/PROJECT.md
 Phase: 2 of 7 (Workspace & Team) — DONE
 Branch: `main` (branches 03 + 04 merged)
 Status: Phase 2 hoan thanh — BE + FE workspace, san sang Phase 3
-Last activity: 2026-03-08 — Hoan thanh toan bo workspace (BE 10 endpoints + FE 4 pages + hooks + components)
+Last activity: 2026-03-11 — Fixed Google OAuth redirect mismatch; workspace UX/state fixes merged to main (see commit 3287823)
 Progress: [############________] 55%
 
 ## What's Done (Phase 2 BE — branch 03)
@@ -69,7 +69,17 @@ Progress: [############________] 55%
 - Commit + merge branch 04 to main, push origin
 - Phase 2 DONE — WS-01..WS-14 all checked
 
+### 2026-03-11
+
+- Fixed Google OAuth frontend redirect mismatch by aligning dev URLs to port 5173
+- Workspace UX/state fixes merged to main:
+  - workspace logo upload/preset handling improvements
+  - asset URL normalization for /uploads/... so logos render correctly against API origin
+  - currentWorkspace recovery/sync after login and workspace selection improvements
+  - workspace switcher/list/settings/join/members flow fixes
+- Commit pushed on main: 3287823 fix(workspace): sync logo and current workspace state
+
 ---
 
 *This file must stay under 100 lines. Move old entries to archive when needed.*
-*Last updated: 2026-03-08*
+*Last updated: 2026-03-11*
