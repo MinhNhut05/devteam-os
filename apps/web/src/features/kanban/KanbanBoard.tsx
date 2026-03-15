@@ -20,6 +20,7 @@ import KanbanFilterBar from './KanbanFilterBar';
 import type { KanbanFilters } from './KanbanFilterBar';
 import TaskCard from './TaskCard';
 import type { Task } from '@/hooks/useTasks';
+import { SkeletonCard, SkeletonLine } from '@/components/Skeleton';
 
 const columns: ColumnConfig[] = [
   { id: 'TODO', name: 'Cần làm', color: 'bg-gray-400' },
@@ -216,8 +217,19 @@ export default function KanbanBoard({ projectId, onTaskClick }: KanbanBoardProps
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600" />
+      <div className="flex gap-4 overflow-x-auto pb-4">
+        {columns.map((col) => (
+          <div key={col.id} className="flex-shrink-0 w-80 card p-4 animate-pulse space-y-3">
+            {/* Column header */}
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-gray-200 dark:bg-gray-700" />
+              <SkeletonLine width="6rem" height="1rem" />
+            </div>
+            {/* Task placeholders */}
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        ))}
       </div>
     );
   }

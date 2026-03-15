@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Loader2, Plus, Trash2 } from 'lucide-react';
+import { CheckSquare, Loader2, Plus, Trash2 } from 'lucide-react';
 import { useChecklists } from '@/hooks/useChecklists';
 import { useCreateChecklistItem } from '@/hooks/useCreateChecklistItem';
 import { useDeleteChecklistItem } from '@/hooks/useDeleteChecklistItem';
 import { useUpdateChecklistItem } from '@/hooks/useUpdateChecklistItem';
+import EmptyState from '@/components/EmptyState';
 
 interface ChecklistSectionProps {
   projectId: string;
@@ -53,7 +54,11 @@ export default function ChecklistSection({
       <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Checklist</h3>
 
       {items.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có checklist item nào.</p>
+        <EmptyState
+          icon={<CheckSquare />}
+          title="Chưa có checklist item nào"
+          compact
+        />
       ) : (
         <div className="space-y-2">
           {items.map((item) => (

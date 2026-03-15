@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Loader2, Plus } from 'lucide-react';
+import { ListChecks, Loader2, Plus } from 'lucide-react';
 import { useCreateSubtask } from '@/hooks/useCreateSubtask';
 import { useUpdateTask } from '@/hooks/useUpdateTask';
 import type { TaskDetail } from '@/hooks/useTask';
+import EmptyState from '@/components/EmptyState';
 
 interface SubtaskListProps {
   projectId: string;
@@ -38,7 +39,11 @@ export default function SubtaskList({ projectId, taskId, subtasks }: SubtaskList
       <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Subtasks</h3>
 
       {subtasks.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có subtask nào.</p>
+        <EmptyState
+          icon={<ListChecks />}
+          title="Chưa có subtask nào"
+          compact
+        />
       ) : (
         <div className="space-y-2">
           {subtasks.map((subtask) => (

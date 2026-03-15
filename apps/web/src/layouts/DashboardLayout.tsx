@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
@@ -8,6 +8,7 @@ import { useWorkspaceStore } from '@/stores/workspace.store';
 
 export default function DashboardLayout() {
   useSocket();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const currentWorkspace = useWorkspaceStore((s) => s.currentWorkspace);
@@ -46,9 +47,9 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col min-w-0">
-        <Header />
+        <Header onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
         <main className="flex-1 p-6 overflow-auto">
           <Outlet />
         </main>

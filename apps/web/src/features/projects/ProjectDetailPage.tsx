@@ -18,6 +18,7 @@ import { useProjectStats } from '@/hooks/useProjectStats';
 import { useTasks } from '@/hooks/useTasks';
 import { resolveApiAssetUrl } from '@/services/api';
 import { useWorkspaceStore } from '@/stores/workspace.store';
+import { SkeletonAvatar, SkeletonCard, SkeletonLine } from '@/components/Skeleton';
 
 const taskStatusLabels: Record<string, string> = {
   TODO: 'Cần làm',
@@ -94,8 +95,35 @@ export default function ProjectDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      <div className="space-y-6">
+        {/* Header skeleton */}
+        <div className="card p-6">
+          <div className="flex items-start gap-4">
+            <SkeletonAvatar size="lg" />
+            <div className="flex-1 space-y-2">
+              <SkeletonLine width="12rem" height="1.5rem" />
+              <SkeletonLine width="20rem" height="1rem" />
+            </div>
+          </div>
+        </div>
+        {/* Stats row skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card p-5 animate-pulse">
+              <SkeletonLine width="60%" height="0.75rem" />
+              <div className="mt-2">
+                <SkeletonLine width="3rem" height="1.75rem" />
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Task list skeleton */}
+        <div className="card p-6 space-y-4">
+          <SkeletonLine width="8rem" height="1.25rem" />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }

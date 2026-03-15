@@ -15,6 +15,7 @@ import { useUpdateMemberRole } from '@/hooks/useUpdateMemberRole';
 import { useAuthStore } from '@/stores/auth.store';
 import { useWorkspaceStore } from '@/stores/workspace.store';
 import InviteMemberModal from '@/features/workspaces/InviteMemberModal';
+import { SkeletonTableRow } from '@/components/Skeleton';
 
 const roleBadgeColors: Record<string, string> = {
   OWNER: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
@@ -176,8 +177,10 @@ export default function MembersPage() {
       )}
 
       {isLoading && (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <div className="card divide-y divide-gray-200 dark:divide-gray-700 px-4">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonTableRow key={i} cols={4} />
+          ))}
         </div>
       )}
 
