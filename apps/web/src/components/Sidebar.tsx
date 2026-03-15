@@ -1,12 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import {
-  FolderKanban,
-  LayoutDashboard,
-  Settings,
-  Users,
-  LogOut,
-  X,
-} from 'lucide-react';
+import { Bot, FolderKanban, LayoutDashboard, LogOut, Settings, Users, X } from 'lucide-react';
 import { useAuthStore } from '@/stores/auth.store';
 import { useWorkspaceStore } from '@/stores/workspace.store';
 import clsx from 'clsx';
@@ -24,6 +17,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   // Build navigation items dynamically based on current workspace
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Hỗ trợ AI', href: '/ai-assistant', icon: Bot },
     ...(currentWorkspace
       ? [
           {

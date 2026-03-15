@@ -9,8 +9,9 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
-import CreateTaskModal from '@/features/tasks/CreateTaskModal';
+import { AiProgressAnalyzer } from '@/features/projects/AiProgressAnalyzer';
 import EditProjectModal from '@/features/projects/EditProjectModal';
+import CreateTaskModal from '@/features/tasks/CreateTaskModal';
 import ProjectTaskModal from '@/features/tasks/TaskDetailModal';
 import { useDeleteProject } from '@/hooks/useDeleteProject';
 import { useProject } from '@/hooks/useProject';
@@ -236,6 +237,8 @@ export default function ProjectDetailPage() {
           </div>
         ))}
       </div>
+
+      {id && <AiProgressAnalyzer projectId={id} />}
 
       {/* Task list */}
       <div className="card p-6">

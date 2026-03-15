@@ -22,11 +22,12 @@ import GoogleCallbackPage from '@/features/auth/pages/GoogleCallbackPage';
 import VerifyEmailPage from '@/features/auth/pages/VerifyEmailPage';
 
 // Main pages (placeholders)
+import { AiAssistantPage } from '@/features/ai/AiAssistantPage';
 import DashboardPage from '@/features/dashboard/DashboardPage';
+import KanbanPage from '@/features/kanban/KanbanPage';
 import ProjectDetailPage from '@/features/projects/ProjectDetailPage';
 import ProjectListPage from '@/features/projects/ProjectListPage';
 import ProjectsPage from '@/features/projects/ProjectsPage';
-import KanbanPage from '@/features/kanban/KanbanPage';
 
 // Workspace pages
 import WorkspaceListPage from '@/features/workspaces/WorkspaceListPage';
@@ -103,6 +104,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:id" element={<ProjectDetailPage />} />
+        <Route path="/ai-assistant" element={<AiAssistantPage />} />
         <Route path="/projects/:projectId/kanban" element={<KanbanPage />} />
         <Route path="/settings/profile" element={<ProfilePage />} />
         <Route path="/settings/password" element={<ChangePasswordPage />} />

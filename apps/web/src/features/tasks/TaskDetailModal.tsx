@@ -8,6 +8,8 @@ import { useUnassignTaskAssignee } from '@/hooks/useUnassignTaskAssignee';
 import { useUpdateTask } from '@/hooks/useUpdateTask';
 import { useWorkspaceStore } from '@/stores/workspace.store';
 import AttachmentSection from '@/features/tasks/AttachmentSection';
+import { AiSuggestAssignee } from '@/features/tasks/AiSuggestAssignee';
+import { AiTaskSplitter } from '@/features/tasks/AiTaskSplitter';
 import ChecklistSection from '@/features/tasks/ChecklistSection';
 import CommentSection from '@/features/tasks/CommentSection';
 import SubtaskList from '@/features/tasks/SubtaskList';
@@ -207,7 +209,7 @@ export default function TaskDetailModal({
               </div>
 
               <div>
-                <label className="label">Due date</label>
+                <label className="label">Hạn hoàn thành</label>
                 <div className="relative">
                   <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <input
@@ -226,7 +228,7 @@ export default function TaskDetailModal({
               </div>
 
               <div>
-                <label className="label">Assignees</label>
+                <label className="label">Người phụ trách</label>
                 <select
                   defaultValue=""
                   onChange={(event) => {
@@ -278,6 +280,21 @@ export default function TaskDetailModal({
                   ))}
                 </div>
               )}
+
+              {currentWorkspace?.id && (
+                <AiSuggestAssignee
+                  taskId={task.id}
+                  projectId={projectId}
+                  workspaceId={currentWorkspace.id}
+                  onAssign={(userId) => {
+                    assignTaskAssignee.mutate({
+                      projectId,
+                      taskId: task.id,
+                      userId,
+                    });
+                  }}
+                />
+              )}
             </div>
 
             <div>
@@ -290,6 +307,8 @@ export default function TaskDetailModal({
                 placeholder="Mô tả chi tiết công việc"
               />
             </div>
+
+            <AiTaskSplitter taskDescription={descriptionDraft} projectId={projectId} taskId={task.id} />
 
             <SubtaskList projectId={projectId} taskId={task.id} subtasks={task.subtasks} />
 
