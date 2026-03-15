@@ -6,6 +6,7 @@ import { useMarkAllRead } from '@/hooks/useMarkAllRead';
 import { useMarkRead } from '@/hooks/useMarkRead';
 import { useNotifications } from '@/hooks/useNotifications';
 import type { Notification } from '@/hooks/useNotifications';
+import EmptyState from '@/components/EmptyState';
 
 interface NotificationDropdownProps {
   onClose: () => void;
@@ -76,9 +77,11 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
             <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
           </div>
         ) : !notifications || notifications.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            Không có thông báo nào.
-          </p>
+          <EmptyState
+            icon={<Bell />}
+            title="Không có thông báo nào"
+            compact
+          />
         ) : (
           <ul>
             {notifications.map((notification: Notification) => (

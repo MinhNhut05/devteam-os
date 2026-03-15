@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useThemeStore } from '@/stores/theme.store';
 import { useEffect } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Layouts
 import AuthLayout from '@/layouts/AuthLayout';
@@ -53,6 +54,7 @@ function App() {
   }, [theme]);
 
   return (
+    <ErrorBoundary>
     <Routes>
       {/* Public routes — redirect to / if already logged in */}
       <Route element={<AuthLayout />}>
@@ -115,6 +117,7 @@ function App() {
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </ErrorBoundary>
   );
 }
 

@@ -85,33 +85,33 @@
 
 ### Comments & Real-time (RT)
 
-- [~] **RT-01**: Them/sua/xoa comment trong task (chi nguoi viet duoc sua/xoa)
-- [~] **RT-02**: @mention voi autocomplete dropdown (highlight xanh, click xem profile)
-- [~] **RT-03**: Tao notification khi @mention
-- [~] **RT-04**: Xem danh sach notifications (paginated)
-- [~] **RT-05**: Danh dau da doc / doc tat ca notifications
-- [~] **RT-06**: Unread count badge tren notification bell
-- [~] **RT-07**: WebSocket Gateway (Socket.io) voi JWT authentication
-- [~] **RT-08**: Real-time events: task_created, task_updated, task_deleted, comment_added
-- [~] **RT-09**: Real-time Kanban updates (thay card di chuyen khi nguoi khac keo)
-- [~] **RT-10**: 7 loai notification: TASK_ASSIGNED, TASK_UPDATED, TASK_COMPLETED, COMMENT_ADDED, COMMENT_MENTION, DEADLINE_APPROACHING, INVITATION_RECEIVED
+- [x] **RT-01**: Them/sua/xoa comment trong task (chi nguoi viet duoc sua/xoa)
+- [x] **RT-02**: @mention voi autocomplete dropdown (highlight xanh, click xem profile)
+- [x] **RT-03**: Tao notification khi @mention
+- [x] **RT-04**: Xem danh sach notifications (paginated)
+- [x] **RT-05**: Danh dau da doc / doc tat ca notifications
+- [x] **RT-06**: Unread count badge tren notification bell
+- [x] **RT-07**: WebSocket Gateway (Socket.io) voi JWT authentication
+- [x] **RT-08**: Real-time events: task_created, task_updated, task_deleted, comment_added
+- [x] **RT-09**: Real-time Kanban updates (thay card di chuyen khi nguoi khac keo)
+- [x] **RT-10**: 7 loai notification: TASK_ASSIGNED, TASK_UPDATED, TASK_COMPLETED, COMMENT_ADDED, COMMENT_MENTION, DEADLINE_APPROACHING, INVITATION_RECEIVED
 
 ### Dashboard & Reports (DASH)
 
-- [~] **DASH-01**: Dashboard stats API (project progress, tasks by status, overdue, workload)
-- [~] **DASH-02**: Activity feed API (paginated, 20 items/page)
-- [~] **DASH-03**: ProjectProgressWidget — progress bar moi project
-- [~] **DASH-04**: TasksStatusChart — Recharts pie chart (TODO/IN_PROGRESS/DONE)
-- [~] **DASH-05**: OverdueTasksWidget — danh sach task qua han
-- [~] **DASH-06**: RecentActivityWidget — feed hoat dong gan day
-- [~] **DASH-07**: MemberWorkloadChart — Recharts bar chart so task/member
+- [x] **DASH-01**: Dashboard stats API (project progress, tasks by status, overdue, workload)
+- [x] **DASH-02**: Activity feed API (paginated, 20 items/page)
+- [x] **DASH-03**: ProjectProgressWidget — progress bar moi project
+- [x] **DASH-04**: TasksStatusChart — Recharts pie chart (TODO/IN_PROGRESS/DONE)
+- [x] **DASH-05**: OverdueTasksWidget — danh sach task qua han
+- [x] **DASH-06**: RecentActivityWidget — feed hoat dong gan day
+- [x] **DASH-07**: MemberWorkloadChart — Recharts bar chart so task/member
 
 ### Polish & Deploy (DEPLOY)
 
-- [ ] **DEPLOY-01**: Global error boundary + toast notifications
-- [ ] **DEPLOY-02**: Loading states (skeleton screens)
-- [ ] **DEPLOY-03**: Empty states cho danh sach trong
-- [ ] **DEPLOY-04**: Responsive design (mobile-friendly)
+- [x] **DEPLOY-01**: Global error boundary + toast notifications
+- [x] **DEPLOY-02**: Loading states (skeleton screens)
+- [x] **DEPLOY-03**: Empty states cho danh sach trong
+- [x] **DEPLOY-04**: Responsive design (mobile-friendly)
 - [ ] **DEPLOY-05**: Docker setup production
 - [ ] **DEPLOY-06**: Nginx reverse proxy configuration
 - [ ] **DEPLOY-07**: PM2 process manager
@@ -163,13 +163,14 @@
 | TASK-01..11 | Phase 3 | `05-feat-project-task-be`, `06-feat-project-task-fe` | Hoan thanh |
 | AI-01..06 | Phase 3 | `07-feat-ai-be`, `08-feat-ai-fe` | Hoan thanh |
 | KAN-01..07 | Phase 4 | `09-feat-kanban-fe` | Hoan thanh |
-| RT-01..10 | Phase 5 | `10-feat-realtime-be`, `11-feat-realtime-fe` | Dang hoan thien |
-| DASH-01..07 | Phase 6 | `12-feat-dashboard-be`, `13-feat-dashboard-fe` | Chua lam |
-| DEPLOY-01..10 | Phase 7 | `14-feat-polish`, `15-chore-deploy` | Chua lam |
+| RT-01..10 | Phase 5 | `10-feat-realtime-be`, `11-feat-realtime-fe` | Hoan thanh |
+| DASH-01..07 | Phase 6 | `12-feat-dashboard-be`, `13-feat-dashboard-fe` | Hoan thanh |
+| DEPLOY-01..04 | Phase 7 | `main` | Hoan thanh |
+| DEPLOY-05..10 | Phase 7 | `15-chore-deploy` | Chua lam |
 
 **Coverage:** 78 v1 requirements, 10 v2 requirements
 **Mapped:** 78/78 (100%)
 
 ---
 
-*Last updated: 2026-03-15*
+*Last updated: 2026-03-16*

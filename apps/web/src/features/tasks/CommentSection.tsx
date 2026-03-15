@@ -8,6 +8,7 @@ import { useCreateComment } from '@/hooks/useCreateComment';
 import { useUpdateComment } from '@/hooks/useUpdateComment';
 import { useDeleteComment } from '@/hooks/useDeleteComment';
 import MentionInput from '@/features/tasks/MentionInput';
+import EmptyState from '@/components/EmptyState';
 
 interface CommentSectionProps {
   taskId: string;
@@ -191,7 +192,11 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có bình luận nào.</p>
+        <EmptyState
+          icon={<MessageSquare />}
+          title="Chưa có bình luận nào"
+          compact
+        />
       )}
 
       {/* New comment form */}

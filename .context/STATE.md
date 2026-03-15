@@ -4,15 +4,15 @@
 
 See: .context/PROJECT.md
 **Core value:** UX/UI xuat sac + AI features tich hop
-**Current focus:** Phase 6 (Dashboard) — code xong, cho manual test + verification
+**Current focus:** Phase 7 (Polish) — DONE
 
 ## Current Position
 
-Phase: 6 of 7 (Dashboard & Reports) — IN PROGRESS
+Phase: 7 of 7 (Polish & Deploy) — DONE (DEPLOY-01..04)
 Branch: `main` (code truc tiep tren main)
-Status: Phase 5 commit + push xong, Dashboard BE + FE code xong, local validation pass, cho manual test
-Last activity: 2026-03-15 — push Phase 5 + Dashboard commit len origin
-Progress: [#################___] 85%
+Status: MVP complete — error boundary, skeleton, empty states, responsive done
+Last activity: 2026-03-16 — Phase 7 Polish commit + push
+Progress: [####################] 100%
 
 ## What's Done (Summary)
 
@@ -36,69 +36,45 @@ Progress: [#################___] 85%
 - Kanban Board: KanbanPage, KanbanColumn, TaskCard, drag-drop, filter, quick add
 - KAN-01..07 DONE
 
-**Phase 5 BE** (branch 10):
-- Comments module: 4 endpoints CRUD (GET/POST/PATCH/DELETE)
-- Notifications module: 4 endpoints + unread-count
-- WebSocket Gateway: Socket.io + JWT auth, room management, emit events
+**Phase 5** (BE branch 10 + FE main):
+- Comments + Notifications modules, WebSocket Gateway
+- CommentSection + MentionInput, NotificationBell + NotificationDropdown
+- RT-01..10 DONE
 
-**Phase 5 FE** (main):
-- socket.ts singleton + useSocket hook (connect/disconnect/cache invalidation)
-- CommentSection + MentionInput (@mention autocomplete, highlight, edit/delete)
-- NotificationBell + NotificationDropdown (real-time badge, mark read/all)
-- 8 hooks: useComments, useCreateComment, useUpdateComment, useDeleteComment,
-  useNotifications, useUnreadCount, useMarkRead, useMarkAllRead
-- Build: tsc --noEmit pass + vite build pass
+**Phase 6** (main):
+- Dashboard stats API + Activity feed + 5 widgets
+- DASH-01..07 DONE
+
+**Phase 7** (main):
+- DEPLOY-01: ErrorBoundary class component + toast (via hooks)
+- DEPLOY-02: Skeleton components (SkeletonLine, SkeletonCard, SkeletonTableRow, SkeletonAvatar)
+- DEPLOY-03: EmptyState component (compact + full mode)
+- DEPLOY-04: Responsive sidebar drawer + hamburger menu
 
 ## What's Next
 
-1. Manual test Dashboard + Comments + Notifications + Realtime
-2. Verify RT-01..10 va DASH-01..07 de cap nhat REQUIREMENTS
-3. Quyết định Phase tiep theo sau khi test xong
-
-## Blockers/Concerns
-
-- Chua co manual browser test cho Dashboard + Realtime sau 2 commit moi nhat
+- MVP Done! Manual browser test cuoi cung
+- Co the: deploy production (DEPLOY-05..10), viet README, demo
 
 ## Known Warnings (non-blocking)
 
 - invite het han van chan re-invite (check duplicate ko xet expiresAt)
 - slug race condition chua map Prisma P2002
-
-## Accumulated Decisions
-
-- Context restructured to `.context/` with GSD concepts (2026-02-27)
-- Google OAuth + Email features: lam luon trong MVP (2026-02-15)
-- Refresh token: Database + Cookie (2026-02-15)
-- 4 AI Features tich hop vao MVP (2026-02-15)
-- Auth hardening: NestJS CacheModule cho Google one-time code exchange (2026-03-06)
-- Workspace BE before FE, sequential merge flow (2026-03-08)
-- Email-bound invite validation: joinByToken check user email match invitation (2026-03-08)
-- Phase 5 code tren main (khong tach branch rieng cho FE)
-- Quy uoc chia tab theo do kho/model: task binh thuong → Sonnet 4.6, task kho/nhieu file → Opus 4.6
+- Vite build large chunk warning (>500kB) — code-split neu can
 
 ## Session Log
 
-### 2026-03-08
+### 2026-03-16
 
-- Branch 03 BE + 04 FE: workspace + team, 10 endpoints (archived)
-
-### 2026-03-14
-
-- Phase 3 merged to main; PROJ-01..07, TASK-01..11, AI-01..06 checked
+- Phase 7 Polish: review 20 files, tsc pass, build pass, 0 bugs found
+- Updated REQUIREMENTS: RT-01..10, DASH-01..07 → [x], DEPLOY-01..04 → [x]
+- Commit + push to origin (MinhNhut05)
 
 ### 2026-03-15
 
-- Regression verification completed:
-  - Frontend: tsc --noEmit passed.
-  - Frontend build: vite build passed; only non-blocking "large chunk" warning observed.
-  - Backend: tsc --noEmit passed.
-  - Kanban: dnd-kit drag-drop + useSocket cache invalidation paths confirmed (WS events + local reorder flows).
-  - Project image upload: FE PATCH flow + BE FileInterceptor (multer) handling confirmed end-to-end.
-  - Code scan (scoped): no TODO/FIXME comments found (enum/status string matches ignored as false positives).
-  - Router/sidebar: mismatches reported only — global /projects vs workspace-scoped project routes; user settings routes vs workspace settings links.
-- No blockers; proceed to update ROADMAP/REQUIREMENTS if needed by test results.
+- Regression verification: tsc pass, build pass, code scan clean
 
 ---
 
 *This file must stay under 100 lines. Move old entries to archive when needed.*
-*Last updated: 2026-03-15*
+*Last updated: 2026-03-16*

@@ -4,6 +4,7 @@ import { resolveApiAssetUrl } from '@/services/api';
 import { useDeleteAttachment } from '@/hooks/useDeleteAttachment';
 import { useUploadAttachment } from '@/hooks/useUploadAttachment';
 import type { Attachment } from '@/hooks/useTask';
+import EmptyState from '@/components/EmptyState';
 
 interface AttachmentSectionProps {
   projectId: string;
@@ -71,7 +72,11 @@ export default function AttachmentSection({
       </div>
 
       {normalizedAttachments.length === 0 ? (
-        <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có file đính kèm.</p>
+        <EmptyState
+          icon={<Paperclip />}
+          title="Chưa có file đính kèm"
+          compact
+        />
       ) : (
         <div className="space-y-2">
           {normalizedAttachments.map((attachment) => (

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useUpdateProfile } from '@/hooks/useUpdateProfile';
+import { SkeletonAvatar, SkeletonLine } from '@/components/Skeleton';
 
 const profileSchema = z.object({
   name: z.string().min(2, 'Tên tối thiểu 2 ký tự'),
@@ -39,8 +40,26 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-indigo-600 dark:text-indigo-400 animate-spin" />
+      <div className="max-w-2xl mx-auto space-y-6">
+        {/* Avatar + name */}
+        <div className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <SkeletonAvatar size="lg" />
+          <div className="flex-1 space-y-2">
+            <SkeletonLine width="10rem" height="1rem" />
+            <SkeletonLine width="6rem" height="0.75rem" />
+          </div>
+        </div>
+        {/* Form fields */}
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="space-y-2 animate-pulse">
+            <SkeletonLine width="5rem" height="0.75rem" />
+            <SkeletonLine height="2.5rem" />
+          </div>
+        ))}
+        {/* Actions */}
+        <div className="animate-pulse">
+          <SkeletonLine width="8rem" height="2.5rem" />
+        </div>
       </div>
     );
   }

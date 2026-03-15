@@ -4,6 +4,7 @@ import { Plus, Building2, AlertCircle } from 'lucide-react';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
 import { useWorkspaceStore } from '@/stores/workspace.store';
 import CreateWorkspaceModal from '@/features/workspaces/CreateWorkspaceModal';
+import EmptyState from '@/components/EmptyState';
 
 // Role badge color mapping
 const roleBadgeColors: Record<string, string> = {
@@ -82,22 +83,12 @@ export default function WorkspaceListPage() {
 
       {/* Empty state */}
       {!isLoading && workspaces && workspaces.length === 0 && (
-        <div className="text-center py-16">
-          <Building2 className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            Chưa có workspace nào
-          </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">
-            Tạo workspace đầu tiên để bắt đầu quản lý dự án.
-          </p>
-          <button
-            onClick={() => setShowCreate(true)}
-            className="btn-primary"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Tạo workspace đầu tiên
-          </button>
-        </div>
+        <EmptyState
+          icon={<Building2 />}
+          title="Chưa có workspace nào"
+          description="Tạo workspace đầu tiên để bắt đầu quản lý dự án."
+          action={{ label: 'Tạo workspace đầu tiên', onClick: () => setShowCreate(true) }}
+        />
       )}
 
       {/* Workspace grid */}

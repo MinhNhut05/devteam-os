@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AlertCircle, FolderKanban, Plus } from 'lucide-react';
+import { AlertCircle, FolderOpen, Plus } from 'lucide-react';
 import CreateProjectModal from '@/features/projects/CreateProjectModal';
 import { useProjects } from '@/hooks/useProjects';
 import { resolveApiAssetUrl } from '@/services/api';
+import { SkeletonCard } from '@/components/Skeleton';
+import EmptyState from '@/components/EmptyState';
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Đang hoạt động',
@@ -56,38 +58,19 @@ export default function ProjectListPage() {
 
       {isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="card p-5 animate-pulse">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="h-10 w-10 rounded-xl bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
-                <div className="flex-1">
-                  <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-2" />
-                  <div className="h-3 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2" />
-                  <div className="h-3 w-2/3 bg-gray-200 dark:bg-gray-700 rounded" />
-                </div>
-              </div>
-              <div className="h-5 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
-            </div>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonCard key={index} />
           ))}
         </div>
       )}
 
       {!isLoading && projects && projects.length === 0 && (
-        <div className="card p-12 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-            <FolderKanban className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Chưa có dự án nào
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Bắt đầu bằng cách tạo dự án đầu tiên cho workspace này.
-          </p>
-          <button onClick={() => setShowCreate(true)} className="btn-primary">
-            <Plus className="w-5 h-5 mr-2" />
-            Tạo dự án đầu tiên
-          </button>
-        </div>
+        <EmptyState
+          icon={<FolderOpen />}
+          title="Chưa có dự án nào"
+          description="Bắt đầu bằng cách tạo dự án đầu tiên cho workspace này."
+          action={{ label: 'Tạo dự án đầu tiên', onClick: () => setShowCreate(true) }}
+        />
       )}
 
       {!isLoading && projects && projects.length > 0 && (

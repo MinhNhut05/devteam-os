@@ -1,8 +1,10 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { ClipboardList } from 'lucide-react';
 import TaskCard from './TaskCard';
 import QuickAddTask from './QuickAddTask';
 import type { Task } from '@/hooks/useTasks';
+import EmptyState from '@/components/EmptyState';
 
 export interface ColumnConfig {
   id: Task['status'];
@@ -59,6 +61,13 @@ export default function KanbanColumn({
             <TaskCard key={task.id} task={task} onClick={onTaskClick} />
           ))}
         </SortableContext>
+        {tasks.length === 0 && (
+          <EmptyState
+            icon={<ClipboardList />}
+            title="Chưa có task"
+            compact
+          />
+        )}
       </div>
 
       {/* Quick add */}
