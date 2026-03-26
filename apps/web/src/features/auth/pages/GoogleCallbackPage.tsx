@@ -35,7 +35,7 @@ export default function GoogleCallbackPage() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 mx-auto text-indigo-600 animate-spin" />
+        <Loader2 className="w-12 h-12 mx-auto text-primary-600 animate-spin" />
         <p className="mt-4 text-gray-600">Dang xu ly dang nhap Google...</p>
       </div>
     </div>

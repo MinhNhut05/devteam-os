@@ -20,7 +20,7 @@ function highlightMentions(text: string) {
   return parts.map((part, index) => {
     if (part.startsWith('@')) {
       return (
-        <span key={index} className="text-indigo-600 font-medium dark:text-indigo-400">
+        <span key={index} className="text-primary-600 font-medium dark:text-primary-400">
           {part}
         </span>
       );
@@ -90,14 +90,14 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
       {/* Comment list */}
       {isLoading ? (
         <div className="flex justify-center py-4">
-          <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+          <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
         </div>
       ) : comments && comments.length > 0 ? (
         <div className="space-y-3">
           {comments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
               {/* Avatar */}
-              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300">
+              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-semibold text-primary-700 dark:bg-primary-900 dark:text-primary-300">
                 {comment.user.name.charAt(0).toUpperCase()}
               </span>
 
@@ -171,7 +171,7 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
                         setEditContent(comment.content);
                         setEditMentions([...comment.mentions]);
                       }}
-                      className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+                      className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
                     >
                       <Pencil className="w-3 h-3" />
                       Sửa

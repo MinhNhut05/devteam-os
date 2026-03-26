@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   DndContext,
   DragOverlay,
+  KeyboardSensor,
   PointerSensor,
   TouchSensor,
   useSensor,
@@ -9,7 +10,7 @@ import {
   closestCorners,
 } from '@dnd-kit/core';
 import type { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTasks } from '@/hooks/useTasks';
 import { useUpdateTask } from '@/hooks/useUpdateTask';
@@ -46,10 +47,11 @@ export default function KanbanBoard({ projectId, onTaskClick }: KanbanBoardProps
     search: '',
   });
 
-  // Sensors for drag
+  // Sensors for drag (pointer, touch, keyboard)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
   // Filter tasks (AND logic, client-side)

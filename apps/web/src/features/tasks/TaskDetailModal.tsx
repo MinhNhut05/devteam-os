@@ -13,6 +13,7 @@ import { AiTaskSplitter } from '@/features/tasks/AiTaskSplitter';
 import ChecklistSection from '@/features/tasks/ChecklistSection';
 import CommentSection from '@/features/tasks/CommentSection';
 import SubtaskList from '@/features/tasks/SubtaskList';
+import { Modal } from '@/components/ui';
 
 const statusOptions = [
   { value: 'TODO', label: 'Cần làm' },
@@ -116,218 +117,211 @@ export default function TaskDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-
-      <div className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-2xl dark:bg-gray-800">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Chi tiết task</h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose} title="Chi tiết task" size="xl">
+      {isLoading ? (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 className="h-8 w-8 animate-spin text-primary-600" />
         </div>
-
-        {isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
-          </div>
-        ) : isError || !task ? (
-          <div className="px-6 py-10 text-center text-sm text-red-500">
-            Không thể tải chi tiết task.
-          </div>
-        ) : (
-          <div className="space-y-6 px-6 py-5">
-            <div className="flex items-start justify-between gap-4">
-              <input
-                value={titleDraft}
-                onChange={(event) => setTitleDraft(event.target.value)}
-                onBlur={handleBlurTitle}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-semibold text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:focus:ring-indigo-800"
-              />
-              <button
-                type="button"
-                onClick={handleDelete}
-                disabled={deleteTask.isPending}
-                className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/30"
-              >
-                {deleteTask.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Trash2 className="h-4 w-4" />
-                )}
-                Xóa
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-              <div>
-                <label className="label">Trạng thái</label>
-                <select
-                  value={task.status}
-                  onChange={(event) =>
-                    updateTask.mutate({
-                      projectId,
-                      taskId: task.id,
-                      data: { status: event.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE' },
-                    })
-                  }
-                  className="input"
-                >
-                  {statusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="label">Ưu tiên</label>
-                <select
-                  value={task.priority}
-                  onChange={(event) =>
-                    updateTask.mutate({
-                      projectId,
-                      taskId: task.id,
-                      data: {
-                        priority: event.target.value as 'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW',
-                      },
-                    })
-                  }
-                  className="input"
-                >
-                  {priorityOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="label">Hạn hoàn thành</label>
-                <div className="relative">
-                  <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="date"
-                    value={task.dueDate ? task.dueDate.slice(0, 10) : ''}
-                    onChange={(event) =>
-                      updateTask.mutate({
-                        projectId,
-                        taskId: task.id,
-                        data: { dueDate: event.target.value || null },
-                      })
-                    }
-                    className="input pl-10"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="label">Người phụ trách</label>
-                <select
-                  defaultValue=""
-                  onChange={(event) => {
-                    const userId = event.target.value;
-                    if (!userId) return;
-
-                    assignTaskAssignee.mutate({
-                      projectId,
-                      taskId: task.id,
-                      userId,
-                    });
-                    event.target.value = '';
-                  }}
-                  className="input"
-                >
-                  <option value="">+ Thêm người phụ trách</option>
-                  {availableMembers.map((member) => (
-                    <option key={member.userId} value={member.userId}>
-                      {member.user.name} - {member.role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <label className="label">Người phụ trách hiện tại</label>
-              {task.assignees.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có người phụ trách.</p>
+      ) : isError || !task ? (
+        <div className="py-10 text-center text-sm text-danger-500">
+          Không thể tải chi tiết task.
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex items-start justify-between gap-4">
+            <input
+              value={titleDraft}
+              onChange={(event) => setTitleDraft(event.target.value)}
+              onBlur={handleBlurTitle}
+              aria-label="Tiêu đề task"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-semibold text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:focus:ring-primary-800"
+            />
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleteTask.isPending}
+              aria-label="Xóa task"
+              className="inline-flex items-center gap-2 rounded-lg border border-danger-200 px-3 py-2 text-sm font-medium text-danger-600 transition-colors hover:bg-danger-50 disabled:opacity-50 dark:border-danger-900 dark:text-danger-400 dark:hover:bg-danger-950/30"
+            >
+              {deleteTask.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <div className="flex flex-wrap gap-2">
-                  {task.assignees.map((assignee) => (
-                    <button
-                      key={assignee.userId}
-                      type="button"
-                      onClick={() =>
-                        unassignTaskAssignee.mutate({
-                          projectId,
-                          taskId: task.id,
-                          userId: assignee.userId,
-                        })
-                      }
-                      className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700 transition-colors hover:border-red-300 hover:text-red-600 dark:border-gray-700 dark:text-gray-300 dark:hover:border-red-800 dark:hover:text-red-400"
-                    >
-                      <UserPlus className="h-3.5 w-3.5" />
-                      {assignee.user.name}
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  ))}
-                </div>
+                <Trash2 className="h-4 w-4" />
               )}
+              Xóa
+            </button>
+          </div>
 
-              {currentWorkspace?.id && (
-                <AiSuggestAssignee
-                  taskId={task.id}
-                  projectId={projectId}
-                  workspaceId={currentWorkspace.id}
-                  onAssign={(userId) => {
-                    assignTaskAssignee.mutate({
-                      projectId,
-                      taskId: task.id,
-                      userId,
-                    });
-                  }}
-                />
-              )}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div>
+              <label htmlFor="task-detail-status" className="label">Trạng thái</label>
+              <select
+                id="task-detail-status"
+                value={task.status}
+                onChange={(event) =>
+                  updateTask.mutate({
+                    projectId,
+                    taskId: task.id,
+                    data: { status: event.target.value as 'TODO' | 'IN_PROGRESS' | 'DONE' },
+                  })
+                }
+                className="input"
+              >
+                {statusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
-              <label className="label">Mô tả</label>
-              <textarea
-                value={descriptionDraft}
-                onChange={(event) => setDescriptionDraft(event.target.value)}
-                onBlur={handleBlurDescription}
-                className="input min-h-32 resize-y"
-                placeholder="Mô tả chi tiết công việc"
-              />
+              <label htmlFor="task-detail-priority" className="label">Ưu tiên</label>
+              <select
+                id="task-detail-priority"
+                value={task.priority}
+                onChange={(event) =>
+                  updateTask.mutate({
+                    projectId,
+                    taskId: task.id,
+                    data: {
+                      priority: event.target.value as 'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW',
+                    },
+                  })
+                }
+                className="input"
+              >
+                {priorityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <AiTaskSplitter taskDescription={descriptionDraft} projectId={projectId} taskId={task.id} />
+            <div>
+              <label htmlFor="task-detail-duedate" className="label">Hạn hoàn thành</label>
+              <div className="relative">
+                <Calendar className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <input
+                  id="task-detail-duedate"
+                  type="date"
+                  value={task.dueDate ? task.dueDate.slice(0, 10) : ''}
+                  onChange={(event) =>
+                    updateTask.mutate({
+                      projectId,
+                      taskId: task.id,
+                      data: { dueDate: event.target.value || null },
+                    })
+                  }
+                  className="input pl-10"
+                />
+              </div>
+            </div>
 
-            <SubtaskList projectId={projectId} taskId={task.id} subtasks={task.subtasks} />
+            <div>
+              <label htmlFor="task-detail-assignee" className="label">Người phụ trách</label>
+              <select
+                id="task-detail-assignee"
+                defaultValue=""
+                onChange={(event) => {
+                  const userId = event.target.value;
+                  if (!userId) return;
 
-            <ChecklistSection
-              projectId={projectId}
-              taskId={task.id}
-              fallbackItems={task.checklists}
-            />
-
-            <AttachmentSection
-              projectId={projectId}
-              taskId={task.id}
-              attachments={task.attachments}
-            />
-
-            <CommentSection taskId={task.id} projectId={projectId} />
+                  assignTaskAssignee.mutate({
+                    projectId,
+                    taskId: task.id,
+                    userId,
+                  });
+                  event.target.value = '';
+                }}
+                className="input"
+              >
+                <option value="">+ Thêm người phụ trách</option>
+                {availableMembers.map((member) => (
+                  <option key={member.userId} value={member.userId}>
+                    {member.user.name} - {member.role}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-        )}
-      </div>
-    </div>
+
+          <div className="space-y-3">
+            <label className="label">Người phụ trách hiện tại</label>
+            {task.assignees.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">Chưa có người phụ trách.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {task.assignees.map((assignee) => (
+                  <button
+                    key={assignee.userId}
+                    type="button"
+                    onClick={() =>
+                      unassignTaskAssignee.mutate({
+                        projectId,
+                        taskId: task.id,
+                        userId: assignee.userId,
+                      })
+                    }
+                    aria-label={`Gỡ ${assignee.user.name} khỏi task`}
+                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700 transition-colors hover:border-danger-300 hover:text-danger-600 dark:border-gray-700 dark:text-gray-300 dark:hover:border-danger-800 dark:hover:text-danger-400"
+                  >
+                    <UserPlus className="h-3.5 w-3.5" />
+                    {assignee.user.name}
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {currentWorkspace?.id && (
+              <AiSuggestAssignee
+                taskId={task.id}
+                projectId={projectId}
+                workspaceId={currentWorkspace.id}
+                onAssign={(userId) => {
+                  assignTaskAssignee.mutate({
+                    projectId,
+                    taskId: task.id,
+                    userId,
+                  });
+                }}
+              />
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="task-detail-description" className="label">Mô tả</label>
+            <textarea
+              id="task-detail-description"
+              value={descriptionDraft}
+              onChange={(event) => setDescriptionDraft(event.target.value)}
+              onBlur={handleBlurDescription}
+              className="input min-h-32 resize-y"
+              placeholder="Mô tả chi tiết công việc"
+            />
+          </div>
+
+          <AiTaskSplitter taskDescription={descriptionDraft} projectId={projectId} taskId={task.id} />
+
+          <SubtaskList projectId={projectId} taskId={task.id} subtasks={task.subtasks} />
+
+          <ChecklistSection
+            projectId={projectId}
+            taskId={task.id}
+            fallbackItems={task.checklists}
+          />
+
+          <AttachmentSection
+            projectId={projectId}
+            taskId={task.id}
+            attachments={task.attachments}
+          />
+
+          <CommentSection taskId={task.id} projectId={projectId} />
+        </div>
+      )}
+    </Modal>
   );
 }

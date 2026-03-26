@@ -44,7 +44,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     <>
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+        <h1 className="text-xl font-bold text-primary-600 dark:text-primary-400">
           DevTeamOS
         </h1>
         {/* Close button — mobile only */}
@@ -73,10 +73,10 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             onClick={onClose}
             className={({ isActive }) =>
               clsx(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
                 isActive
-                  ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400'
-                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                  ? 'bg-primary-50 text-primary-600 border-l-[3px] border-primary-600 dark:bg-primary-900/50 dark:text-primary-400 dark:border-primary-400'
+                  : 'text-gray-700 hover:bg-gray-100 border-l-[3px] border-transparent dark:text-gray-300 dark:hover:bg-gray-700'
               )
             }
           >
@@ -89,7 +89,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       {/* User */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold">
+          <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold">
             {user?.name?.charAt(0).toUpperCase() || 'U'}
           </div>
           <div className="flex-1 min-w-0">
@@ -103,6 +103,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         </div>
         <button
           onClick={logout}
+          aria-label="Đăng xuất"
           className="flex items-center gap-2 w-full px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
         >
           <LogOut className="w-4 h-4" />

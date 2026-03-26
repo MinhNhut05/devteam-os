@@ -68,7 +68,7 @@ function TaskCard({ task, onClick, isDragOverlay = false }: TaskCardProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className="rounded-lg border-2 border-dashed border-indigo-300 bg-indigo-50 dark:border-indigo-700 dark:bg-indigo-950/30 p-4 opacity-50"
+        className="rounded-lg border-2 border-dashed border-primary-300 bg-primary-50 dark:border-primary-700 dark:bg-primary-950/30 p-4 opacity-50"
       >
         <div className="h-16" />
       </div>
@@ -82,8 +82,10 @@ function TaskCard({ task, onClick, isDragOverlay = false }: TaskCardProps) {
       {...(isDragOverlay ? {} : attributes)}
       {...(isDragOverlay ? {} : listeners)}
       onClick={() => onClick(task.id)}
+      role="button"
+      aria-label={`Task: ${task.title}, ưu tiên ${priority.label}`}
       className={`cursor-grab rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-900 ${
-        isDragOverlay ? 'rotate-3 shadow-lg' : ''
+        isDragOverlay ? 'rotate-2 shadow-xl border-primary-300 dark:border-primary-600 scale-[1.02]' : ''
       }`}
     >
       {/* Title */}
@@ -106,7 +108,7 @@ function TaskCard({ task, onClick, isDragOverlay = false }: TaskCardProps) {
             <div
               key={assignee.userId}
               title={assignee.user.name}
-              className="h-6 w-6 rounded-full border-2 border-white bg-indigo-500 flex items-center justify-center text-[10px] font-medium text-white dark:border-gray-900 overflow-hidden"
+              className="h-6 w-6 rounded-full border-2 border-white bg-primary-500 flex items-center justify-center text-[10px] font-medium text-white dark:border-gray-900 overflow-hidden"
             >
               {assignee.user.avatar ? (
                 <img

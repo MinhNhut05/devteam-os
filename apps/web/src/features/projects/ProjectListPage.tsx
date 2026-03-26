@@ -79,7 +79,7 @@ export default function ProjectListPage() {
             <button
               key={project.id}
               onClick={() => navigate(`/projects/${project.id}`)}
-              className="card p-5 text-left hover:ring-2 hover:ring-indigo-500 hover:shadow-md transition-all cursor-pointer"
+              className="card p-5 text-left hover:ring-2 hover:ring-primary-500 hover:shadow-md transition-all cursor-pointer"
             >
               <div className="flex items-start gap-3 mb-4">
                 {project.image ? (
@@ -106,7 +106,7 @@ export default function ProjectListPage() {
                 </div>
               </div>
 
-              <span className="inline-flex px-2.5 py-1 rounded text-xs font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+              <span className="inline-flex px-2.5 py-1 rounded text-xs font-medium bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300">
                 {statusLabels[project.status] || project.status}
               </span>
             </button>

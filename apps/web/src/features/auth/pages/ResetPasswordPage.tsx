@@ -81,7 +81,7 @@ export default function ResetPasswordPage() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.password.message}</p>
           )}
         </div>
 
@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -129,7 +129,7 @@ export default function ResetPasswordPage() {
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         <Link
           to="/login"
-          className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-medium"
+          className="text-primary-600 dark:text-primary-400 hover:text-primary-500 font-medium"
         >
           Quay lại đăng nhập
         </Link>

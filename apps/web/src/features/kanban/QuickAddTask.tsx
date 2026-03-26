@@ -56,7 +56,7 @@ export default function QuickAddTask({ projectId, status }: QuickAddTaskProps) {
       <button
         type="button"
         onClick={handleOpen}
-        className="w-full rounded-lg border-2 border-dashed border-gray-300 p-2.5 text-sm text-gray-500 transition-colors hover:border-indigo-400 hover:text-indigo-500 dark:border-gray-600 dark:text-gray-400 dark:hover:border-indigo-500 dark:hover:text-indigo-400 flex items-center justify-center gap-1.5"
+        className="w-full rounded-lg border-2 border-dashed border-gray-300 p-2.5 text-sm text-gray-500 transition-colors hover:border-primary-400 hover:text-primary-500 dark:border-gray-600 dark:text-gray-400 dark:hover:border-primary-500 dark:hover:text-primary-400 flex items-center justify-center gap-1.5"
       >
         <Plus className="h-4 w-4" />
         Thêm task
@@ -78,7 +78,7 @@ export default function QuickAddTask({ projectId, status }: QuickAddTaskProps) {
       />
       {createTask.isPending && (
         <div className="flex justify-center py-1">
-          <Loader2 className="h-4 w-4 animate-spin text-indigo-500" />
+          <Loader2 className="h-4 w-4 animate-spin text-primary-500" />
         </div>
       )}
     </div>

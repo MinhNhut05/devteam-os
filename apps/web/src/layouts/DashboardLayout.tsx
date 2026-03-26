@@ -47,10 +47,18 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
+      {/* Skip to main content — accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
+      >
+        Chuyển đến nội dung chính
+      </a>
+
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 flex flex-col min-w-0">
         <Header onMenuToggle={() => setSidebarOpen((prev) => !prev)} />
-        <main className="flex-1 p-6 overflow-auto">
+        <main id="main-content" className="flex-1 p-6 overflow-auto">
           <Outlet />
         </main>
       </div>

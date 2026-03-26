@@ -33,7 +33,7 @@ export default function KanbanPage() {
       <div className="mb-4 flex items-center gap-4">
         <Link
           to={`/projects/${projectId}`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Quay lại dự án

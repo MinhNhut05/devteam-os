@@ -20,8 +20,8 @@ export default function ProjectsPage() {
 
       {/* Empty state */}
       <div className="card p-12 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-          <Plus className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+          <Plus className="w-8 h-8 text-primary-600 dark:text-primary-400" />
         </div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           Chưa có dự án nào

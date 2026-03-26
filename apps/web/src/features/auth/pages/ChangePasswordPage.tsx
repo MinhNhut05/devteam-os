@@ -70,7 +70,7 @@ export default function ChangePasswordPage() {
             </button>
           </div>
           {errors.currentPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.currentPassword.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.currentPassword.message}</p>
           )}
         </div>
 
@@ -95,7 +95,7 @@ export default function ChangePasswordPage() {
             </button>
           </div>
           {errors.newPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.newPassword.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.newPassword.message}</p>
           )}
         </div>
 
@@ -111,7 +111,7 @@ export default function ChangePasswordPage() {
             placeholder="••••••••"
           />
           {errors.confirmNewPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.confirmNewPassword.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.confirmNewPassword.message}</p>
           )}
         </div>
 
@@ -134,7 +134,7 @@ export default function ChangePasswordPage() {
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         <Link
           to="/settings/profile"
-          className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-medium"
+          className="text-primary-600 dark:text-primary-400 hover:text-primary-500 font-medium"
         >
           Quay lại profile
         </Link>

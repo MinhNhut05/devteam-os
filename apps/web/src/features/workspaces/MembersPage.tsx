@@ -18,7 +18,7 @@ import InviteMemberModal from '@/features/workspaces/InviteMemberModal';
 import { SkeletonTableRow } from '@/components/Skeleton';
 
 const roleBadgeColors: Record<string, string> = {
-  OWNER: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
+  OWNER: 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300',
   ADMIN: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
   MEMBER: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
   VIEWER: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
@@ -147,7 +147,7 @@ export default function MembersPage() {
   return (
     <div className="max-w-4xl">
       <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
-        <Link to="/workspaces" className="hover:text-indigo-600 dark:hover:text-indigo-400">
+        <Link to="/workspaces" className="hover:text-primary-600 dark:hover:text-primary-400">
           Workspaces
         </Link>
         <span>/</span>
@@ -201,7 +201,7 @@ export default function MembersPage() {
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold">
+                    <div className="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold">
                       {member.user.name.charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -250,7 +250,7 @@ export default function MembersPage() {
                                 onClick={() => handleRoleChange(member.userId, role)}
                                 className={`w-full text-left px-3 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
                                   member.role === role
-                                    ? 'text-indigo-600 dark:text-indigo-400 font-medium'
+                                    ? 'text-primary-600 dark:text-primary-400 font-medium'
                                     : 'text-gray-700 dark:text-gray-300'
                                 }`}
                               >

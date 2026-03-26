@@ -36,9 +36,11 @@ export default function KanbanColumn({
     <div
       className={`flex-shrink-0 w-80 rounded-xl p-4 flex flex-col transition-colors ${
         isOver
-          ? 'bg-indigo-50 dark:bg-indigo-950/30'
+          ? 'bg-primary-50 dark:bg-primary-950/30'
           : 'bg-gray-100 dark:bg-gray-800'
       }`}
+      role="region"
+      aria-label={`Cột ${column.name}, ${tasks.length} task`}
     >
       {/* Column header */}
       <div className="flex items-center gap-2 mb-3">

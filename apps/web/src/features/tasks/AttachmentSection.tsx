@@ -97,7 +97,7 @@ export default function AttachmentSection({
                 href={attachment.resolvedPath}
                 target="_blank"
                 rel="noreferrer"
-                className="p-1 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"
+                className="p-1 text-gray-400 hover:text-primary-600 dark:hover:text-primary-400"
               >
                 <Download className="w-4 h-4" />
               </a>

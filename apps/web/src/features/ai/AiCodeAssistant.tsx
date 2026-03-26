@@ -35,7 +35,7 @@ export function AiCodeAssistant() {
     <div className="card p-6 space-y-4">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Bot className="h-5 w-5 text-indigo-500" />
+        <Bot className="h-5 w-5 text-primary-500" />
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Hỗ trợ kỹ thuật</h2>
       </div>
 

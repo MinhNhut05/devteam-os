@@ -122,7 +122,7 @@ export default function WorkspaceSettingsPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     );
   }
@@ -136,7 +136,7 @@ export default function WorkspaceSettingsPage() {
     <div className="max-w-2xl">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
-        <Link to="/workspaces" className="hover:text-indigo-600 dark:hover:text-indigo-400">
+        <Link to="/workspaces" className="hover:text-primary-600 dark:hover:text-primary-400">
           Workspaces
         </Link>
         <span>/</span>

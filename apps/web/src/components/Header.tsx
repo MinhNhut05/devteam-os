@@ -38,7 +38,8 @@ export default function Header({ onMenuToggle }: HeaderProps) {
             <input
               type="text"
               placeholder="Tìm kiếm..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border-0 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
+              aria-label="Tìm kiếm"
+              className="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border-0 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -48,6 +49,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
       <div className="flex items-center gap-2">
         <button
           onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
           className="p-2.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
         >
           {theme === 'dark' ? (

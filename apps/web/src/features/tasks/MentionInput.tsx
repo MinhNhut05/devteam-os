@@ -107,7 +107,7 @@ export default function MentionInput({
                   }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-left"
                 >
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300 shrink-0">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-xs font-semibold text-primary-700 dark:bg-primary-900 dark:text-primary-300 shrink-0">
                     {member.user.name.charAt(0).toUpperCase()}
                   </span>
                   <span className="text-gray-900 dark:text-white truncate">{member.user.name}</span>

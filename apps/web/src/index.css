@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --color-primary: 99 102 241; /* indigo-500 */
-    --color-primary-dark: 79 70 229; /* indigo-600 */
+    --color-primary: 37 99 235; /* blue-600 (#2563EB) */
+    --color-primary-dark: 29 78 216; /* blue-700 (#1D4ED8) */
   }
 
   html {
@@ -13,17 +13,18 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    @apply bg-slate-50 text-slate-800 dark:bg-gray-900 dark:text-gray-100;
   }
 }
 
 @layer components {
+  /* ===== Buttons ===== */
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary {
-    @apply btn bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 active:scale-[0.98];
   }
 
   .btn-secondary {
@@ -31,18 +32,55 @@
   }
 
   .btn-danger {
-    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+    @apply btn bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500 active:scale-[0.98];
   }
 
+  .btn-ghost {
+    @apply btn bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 dark:text-gray-300 dark:hover:bg-gray-800;
+  }
+
+  .btn-outline {
+    @apply btn border border-primary-600 text-primary-600 bg-transparent hover:bg-primary-50 focus:ring-primary-500 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-950;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* ===== Inputs ===== */
   .input {
-    @apply block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-500;
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-150 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-500;
+  }
+
+  .input-error {
+    @apply border-danger-500 focus:ring-danger-500;
   }
 
   .label {
     @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
   }
 
+  /* ===== Cards ===== */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700;
+    @apply bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-150;
+  }
+
+  .card-hover {
+    @apply card hover:-translate-y-0.5 hover:border-primary-300 dark:hover:border-primary-600;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

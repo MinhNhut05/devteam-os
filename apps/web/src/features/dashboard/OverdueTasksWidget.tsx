@@ -57,7 +57,7 @@ export default function OverdueTasksWidget({ overdueTasks }: Props) {
                   <div
                     key={assignee.id}
                     title={assignee.name}
-                    className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-[10px] font-medium text-indigo-600 dark:text-indigo-400 ring-2 ring-white dark:ring-gray-800"
+                    className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-[10px] font-medium text-primary-600 dark:text-primary-400 ring-2 ring-white dark:ring-gray-800"
                   >
                     {assignee.name.charAt(0).toUpperCase()}
                   </div>

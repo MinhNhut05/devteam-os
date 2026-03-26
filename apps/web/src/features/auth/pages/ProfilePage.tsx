@@ -74,7 +74,7 @@ export default function ProfilePage() {
 
       {/* Avatar + Email info */}
       <div className="flex items-center gap-4 mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-        <div className="w-16 h-16 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-2xl font-bold text-indigo-600 dark:text-indigo-400 overflow-hidden">
+        <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-2xl font-bold text-primary-600 dark:text-primary-400 overflow-hidden">
           {user.avatar ? (
             <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
           ) : (
@@ -107,7 +107,7 @@ export default function ProfilePage() {
             className="input"
             placeholder="Nhập tên của bạn"
           />
-          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.name.message}</p>}
         </div>
 
         <div>
@@ -138,7 +138,7 @@ export default function ProfilePage() {
           </button>
           <Link
             to="/settings/password"
-            className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 font-medium"
+            className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-500 font-medium"
           >
             Đổi mật khẩu
           </Link>

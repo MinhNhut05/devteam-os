@@ -166,7 +166,7 @@ export default function RegisterPage() {
               onChange={(e) => handleOtpChange(index, e.target.value)}
               onKeyDown={(e) => handleOtpKeyDown(index, e)}
               onPaste={index === 0 ? handleOtpPaste : undefined}
-              className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:bg-gray-800 dark:text-white outline-none transition-colors"
+              className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:bg-gray-800 dark:text-white outline-none transition-colors"
               disabled={verifyOtpMutation.isPending}
             />
           ))}
@@ -191,14 +191,14 @@ export default function RegisterPage() {
         <div className="mt-4 text-center">
           {countdown > 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Gửi lại mã sau <span className="font-medium text-indigo-600">{countdown}s</span>
+              Gửi lại mã sau <span className="font-medium text-primary-600">{countdown}s</span>
             </p>
           ) : (
             <button
               type="button"
               onClick={handleResendOtp}
               disabled={sendOtpMutation.isPending}
-              className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+              className="text-sm text-primary-600 hover:text-primary-500 font-medium"
             >
               {sendOtpMutation.isPending ? 'Đang gửi...' : 'Gửi lại mã'}
             </button>
@@ -229,7 +229,7 @@ export default function RegisterPage() {
             className="input"
             placeholder="Nguyễn Văn A"
           />
-          {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+          {errors.name && <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.name.message}</p>}
         </div>
 
         <div>
@@ -243,7 +243,7 @@ export default function RegisterPage() {
             className="input"
             placeholder="you@example.com"
           />
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -267,7 +267,7 @@ export default function RegisterPage() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.password.message}</p>
           )}
         </div>
 
@@ -283,7 +283,7 @@ export default function RegisterPage() {
             placeholder="••••••••"
           />
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.confirmPassword.message}</p>
           )}
         </div>
 
@@ -301,7 +301,7 @@ export default function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Đã có tài khoản?{' '}
-        <Link to="/login" className="text-indigo-600 hover:text-indigo-500 font-medium">
+        <Link to="/login" className="text-primary-600 hover:text-primary-500 font-medium">
           Đăng nhập
         </Link>
       </p>

@@ -56,10 +56,11 @@ export default function LoginPage() {
             id="email"
             type="email"
             {...register('email')}
-            className="input"
+            className={`input ${errors.email ? 'input-error' : ''}`}
             placeholder="you@example.com"
+            aria-invalid={errors.email ? 'true' : undefined}
           />
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -71,8 +72,9 @@ export default function LoginPage() {
               id="password"
               type={showPassword ? 'text' : 'password'}
               {...register('password')}
-              className="input pr-10"
+              className={`input pr-10 ${errors.password ? 'input-error' : ''}`}
               placeholder="••••••••"
+              aria-invalid={errors.password ? 'true' : undefined}
             />
             <button
               type="button"
@@ -83,14 +85,14 @@ export default function LoginPage() {
             </button>
           </div>
           {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.password.message}</p>
           )}
         </div>
 
         <div className="flex justify-end">
           <Link
             to="/forgot-password"
-            className="text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
+            className="text-sm text-primary-600 hover:text-primary-500 dark:text-primary-400"
           >
             Quên mật khẩu?
           </Link>
@@ -123,7 +125,7 @@ export default function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         Chưa có tài khoản?{' '}
-        <Link to="/register" className="text-indigo-600 hover:text-indigo-500 font-medium">
+        <Link to="/register" className="text-primary-600 hover:text-primary-500 font-medium">
           Đăng ký ngay
         </Link>
       </p>

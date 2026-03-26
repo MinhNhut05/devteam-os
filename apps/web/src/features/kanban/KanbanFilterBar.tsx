@@ -94,14 +94,14 @@ export default function KanbanFilterBar({ tasks, filters, onFiltersChange }: Kan
                 <ListboxOption
                   key={opt.userId}
                   value={opt.userId}
-                  className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 data-[focus]:bg-indigo-50 dark:text-gray-300 dark:data-[focus]:bg-indigo-950/30"
+                  className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 data-[focus]:bg-primary-50 dark:text-gray-300 dark:data-[focus]:bg-primary-950/30"
                 >
                   {({ selected }) => (
                     <>
                       <div
                         className={`h-4 w-4 rounded border flex items-center justify-center ${
                           selected
-                            ? 'border-indigo-500 bg-indigo-500 text-white'
+                            ? 'border-primary-500 bg-primary-500 text-white'
                             : 'border-gray-300 dark:border-gray-600'
                         }`}
                       >
@@ -133,14 +133,14 @@ export default function KanbanFilterBar({ tasks, filters, onFiltersChange }: Kan
               <ListboxOption
                 key={opt.value}
                 value={opt.value}
-                className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 data-[focus]:bg-indigo-50 dark:text-gray-300 dark:data-[focus]:bg-indigo-950/30"
+                className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm text-gray-700 data-[focus]:bg-primary-50 dark:text-gray-300 dark:data-[focus]:bg-primary-950/30"
               >
                 {({ selected }) => (
                   <>
                     <div
                       className={`h-4 w-4 rounded border flex items-center justify-center ${
                         selected
-                          ? 'border-indigo-500 bg-indigo-500 text-white'
+                          ? 'border-primary-500 bg-primary-500 text-white'
                           : 'border-gray-300 dark:border-gray-600'
                       }`}
                     >
@@ -163,7 +163,7 @@ export default function KanbanFilterBar({ tasks, filters, onFiltersChange }: Kan
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Tìm kiếm task..."
-          className="rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:placeholder-gray-500 w-52"
+          className="rounded-lg border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:placeholder-gray-500 w-52"
         />
       </div>
 

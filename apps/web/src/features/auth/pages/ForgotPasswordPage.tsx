@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
         </p>
         <Link
           to="/login"
-          className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-medium"
+          className="text-primary-600 hover:text-primary-500 dark:text-primary-400 font-medium"
         >
           Quay lại đăng nhập
         </Link>
@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
             className="input"
             placeholder="you@example.com"
           />
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="mt-1 text-sm text-danger-600 dark:text-danger-400">{errors.email.message}</p>}
         </div>
 
         <button type="submit" disabled={mutation.isPending} className="btn-primary w-full">
@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
       <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
         <Link
           to="/login"
-          className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-medium"
+          className="text-primary-600 hover:text-primary-500 dark:text-primary-400 font-medium"
         >
           Quay lại đăng nhập
         </Link>

@@ -60,7 +60,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
           type="button"
           onClick={() => markAllRead.mutate()}
           disabled={!hasUnread || markAllRead.isPending}
-          className="text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="text-xs text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {markAllRead.isPending ? (
             <Loader2 className="w-3 h-3 animate-spin" />
@@ -74,7 +74,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
       <div className="max-h-96 overflow-y-auto">
         {isLoading ? (
           <div className="flex justify-center py-8">
-            <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+            <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
           </div>
         ) : !notifications || notifications.length === 0 ? (
           <EmptyState
@@ -91,7 +91,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
                   onClick={() => handleItemClick(notification)}
                   className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50 ${
                     !notification.read
-                      ? 'bg-indigo-50 dark:bg-indigo-950/30'
+                      ? 'bg-primary-50 dark:bg-primary-950/30'
                       : 'bg-white dark:bg-gray-800'
                   }`}
                 >
@@ -99,7 +99,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
                   <span
                     className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
                       !notification.read
-                        ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-400'
+                        ? 'bg-primary-100 text-primary-600 dark:bg-primary-900 dark:text-primary-400'
                         : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                     }`}
                   >
@@ -130,7 +130,7 @@ export default function NotificationDropdown({ onClose }: NotificationDropdownPr
 
                   {/* Unread dot */}
                   {!notification.read && (
-                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-indigo-500" />
+                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary-500" />
                   )}
                 </button>
               </li>

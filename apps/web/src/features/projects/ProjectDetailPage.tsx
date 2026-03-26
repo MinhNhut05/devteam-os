@@ -156,7 +156,7 @@ export default function ProjectDetailPage() {
     <div className="space-y-6">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-        <Link to={backHref} className="hover:text-indigo-600 dark:hover:text-indigo-400">
+        <Link to={backHref} className="hover:text-primary-600 dark:hover:text-primary-400">
           Dự án
         </Link>
         <span>/</span>
@@ -185,7 +185,7 @@ export default function ProjectDetailPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{project.name}</h1>
-              <span className="inline-flex px-2.5 py-1 rounded text-xs font-medium bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+              <span className="inline-flex px-2.5 py-1 rounded text-xs font-medium bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300">
                 {projectStatusLabels[project.status] || project.status}
               </span>
             </div>
@@ -273,7 +273,7 @@ export default function ProjectDetailPage() {
                 type="button"
                 key={task.id}
                 onClick={() => openTaskModal(task.id)}
-                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-left transition-colors hover:border-indigo-400 dark:hover:border-indigo-500"
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 p-4 text-left transition-colors hover:border-primary-400 dark:hover:border-primary-500"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -283,7 +283,7 @@ export default function ProjectDetailPage() {
                     </p>
                   </div>
                   <div className="text-right space-y-1">
-                    <span className="block text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                    <span className="block text-xs font-medium text-primary-600 dark:text-primary-400">
                       {taskStatusLabels[task.status] || task.status}
                     </span>
                     <span className="block text-xs text-gray-500 dark:text-gray-400">

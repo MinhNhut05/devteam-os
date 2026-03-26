@@ -30,7 +30,7 @@ export default function JoinInvitationPage() {
   if (!isHydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     );
   }
@@ -42,7 +42,7 @@ export default function JoinInvitationPage() {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
           <div className="card p-8 max-w-md w-full text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-indigo-600 mx-auto mb-4" />
+            <Loader2 className="w-12 h-12 animate-spin text-primary-600 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
               Đang tham gia workspace...
             </h2>
@@ -84,17 +84,17 @@ export default function JoinInvitationPage() {
     // Success state — hook already navigates to '/', but show fallback
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     );
   }
 
   // Not authenticated — show login/register options
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 p-4">
       <div className="card p-8 max-w-md w-full text-center">
-        <div className="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center mx-auto mb-4">
-          <Mail className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+        <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center mx-auto mb-4">
+          <Mail className="w-6 h-6 text-primary-600 dark:text-primary-400" />
         </div>
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
           Bạn được mời tham gia workspace
@@ -111,7 +111,7 @@ export default function JoinInvitationPage() {
           </button>
           <button
             onClick={() => navigate('/register', { state: { from: `/invite/${token}` } })}
-            className="w-full px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors"
+            className="w-full px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors"
           >
             Đăng ký tài khoản mới
           </button>

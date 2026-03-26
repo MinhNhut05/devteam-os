@@ -5,7 +5,7 @@ import { useWorkspaceStore } from '@/stores/workspace.store';
 
 // Role badge colors (compact version for dropdown items)
 const roleBadgeColors: Record<string, string> = {
-  OWNER: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
+  OWNER: 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300',
   ADMIN: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
   MEMBER: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
   VIEWER: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
@@ -79,7 +79,7 @@ export default function WorkspaceSwitcher() {
               className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
             />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold text-sm flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold text-sm flex-shrink-0">
               {currentWorkspace.name.charAt(0).toUpperCase()}
             </div>
           )
@@ -109,7 +109,7 @@ export default function WorkspaceSwitcher() {
               key={ws.id}
               onClick={() => handleSelect(ws.id)}
               className={`w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                currentWorkspace?.id === ws.id ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
+                currentWorkspace?.id === ws.id ? 'bg-primary-50 dark:bg-primary-900/20' : ''
               }`}
             >
               {/* Logo or initial */}
@@ -120,7 +120,7 @@ export default function WorkspaceSwitcher() {
                   className="w-7 h-7 rounded-md object-cover flex-shrink-0"
                 />
               ) : (
-                <div className="w-7 h-7 rounded-md bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold text-xs flex-shrink-0">
+                <div className="w-7 h-7 rounded-md bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold text-xs flex-shrink-0">
                   {ws.name.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -151,7 +151,7 @@ export default function WorkspaceSwitcher() {
               setIsOpen(false);
               navigate('/workspaces');
             }}
-            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-indigo-600 dark:text-indigo-400"
+            className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-primary-600 dark:text-primary-400"
           >
             <Plus className="w-4 h-4" />
             <span className="text-sm font-medium">Tạo workspace mới</span>

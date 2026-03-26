@@ -165,7 +165,7 @@ export default function LogoPicker({ workspaceId, currentLogo, workspaceName }: 
             className="h-16 w-16 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
           />
         ) : (
-          <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-gray-200 bg-indigo-100 text-2xl font-semibold text-indigo-600 dark:border-gray-700 dark:bg-indigo-900 dark:text-indigo-400">
+          <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-gray-200 bg-primary-100 text-2xl font-semibold text-primary-600 dark:border-gray-700 dark:bg-primary-900 dark:text-primary-400">
             {workspaceName.charAt(0).toUpperCase()}
           </div>
         )}
@@ -221,8 +221,8 @@ export default function LogoPicker({ workspaceId, currentLogo, workspaceName }: 
                 disabled={isUpdating}
                 className={`group relative rounded-lg border p-2 transition-all disabled:opacity-50 ${
                   isActive
-                    ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200 dark:bg-indigo-900/20 dark:ring-indigo-800'
-                    : 'border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 dark:border-gray-700 dark:hover:border-indigo-500 dark:hover:bg-indigo-900/20'
+                    ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 dark:bg-primary-900/20 dark:ring-primary-800'
+                    : 'border-gray-200 hover:border-primary-400 hover:bg-primary-50 dark:border-gray-700 dark:hover:border-primary-500 dark:hover:bg-primary-900/20'
                 }`}
               >
                 <img
@@ -256,7 +256,7 @@ export default function LogoPicker({ workspaceId, currentLogo, workspaceName }: 
                 <button
                   type="button"
                   onClick={handleCrop}
-                  className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-indigo-700"
+                  className="flex items-center gap-2 rounded-lg bg-primary-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-700"
                 >
                   <Check className="h-4 w-4" />
                   Xác nhận crop
@@ -288,7 +288,7 @@ export default function LogoPicker({ workspaceId, currentLogo, workspaceName }: 
                     type="button"
                     onClick={() => handleUpload(selectedFile)}
                     disabled={uploadLogo.isPending}
-                    className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-lg bg-primary-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
                   >
                     {uploadLogo.isPending ? (
                       <>
@@ -318,7 +318,7 @@ export default function LogoPicker({ workspaceId, currentLogo, workspaceName }: 
           {!cropState.show && !previewUrl && (
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-indigo-400 dark:border-gray-600 dark:hover:border-indigo-500"
+              className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-primary-400 dark:border-gray-600 dark:hover:border-primary-500"
             >
               <Upload className="mx-auto mb-2 h-8 w-8 text-gray-400" />
               <p className="text-sm text-gray-600 dark:text-gray-400">Bấm để chọn ảnh từ máy</p>

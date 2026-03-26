@@ -230,8 +230,8 @@ export default function ProjectIconPicker({
                   onClick={() => onIconChange(emoji)}
                   className={`flex h-10 w-full items-center justify-center rounded-lg border text-xl transition-all ${
                     isActive
-                      ? 'border-indigo-500 bg-indigo-50 ring-2 ring-indigo-200 dark:bg-indigo-900/20 dark:ring-indigo-800'
-                      : 'border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 dark:border-gray-700 dark:hover:border-indigo-500 dark:hover:bg-indigo-900/20'
+                      ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 dark:bg-primary-900/20 dark:ring-primary-800'
+                      : 'border-gray-200 hover:border-primary-400 hover:bg-primary-50 dark:border-gray-700 dark:hover:border-primary-500 dark:hover:bg-primary-900/20'
                   }`}
                 >
                   {emoji}
@@ -282,7 +282,7 @@ export default function ProjectIconPicker({
                     <button
                       type="button"
                       onClick={handleCrop}
-                      className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-indigo-700"
+                      className="flex items-center gap-2 rounded-lg bg-primary-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-700"
                     >
                       <Check className="h-4 w-4" />
                       Xác nhận crop
@@ -315,7 +315,7 @@ export default function ProjectIconPicker({
                         type="button"
                         onClick={() => handleUpload(selectedFile)}
                         disabled={isUploading}
-                        className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-lg bg-primary-600 px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-700 disabled:opacity-50"
                       >
                         {isUploading ? (
                           <>
@@ -346,7 +346,7 @@ export default function ProjectIconPicker({
               {!cropState.show && !previewUrl && (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-indigo-400 dark:border-gray-600 dark:hover:border-indigo-500"
+                  className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-6 text-center transition-colors hover:border-primary-400 dark:border-gray-600 dark:hover:border-primary-500"
                 >
                   <Upload className="mx-auto mb-2 h-8 w-8 text-gray-400" />
                   <p className="text-sm text-gray-600 dark:text-gray-400">Bấm để chọn ảnh từ máy</p>

@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useCreateTask } from '@/hooks/useCreateTask';
+import { Modal } from '@/components/ui';
 
 const createTaskSchema = z.object({
   title: z.string().min(2, 'Tiêu đề tối thiểu 2 ký tự').max(200, 'Tiêu đề tối đa 200 ký tự'),
@@ -65,107 +66,101 @@ export default function CreateTaskModal({ projectId, isOpen, onClose }: CreateTa
     );
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-
-      <div className="relative w-full max-w-lg mx-4 rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Tạo task mới</h2>
-          <button
-            onClick={onClose}
-            className="p-1 text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose} title="Tạo task mới" size="lg">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label htmlFor="task-title" className="label">
+            Tiêu đề
+          </label>
+          <input
+            id="task-title"
+            type="text"
+            {...register('title')}
+            className={`input ${errors.title ? 'input-error' : ''}`}
+            placeholder="Tên công việc"
+            autoFocus
+            aria-invalid={errors.title ? 'true' : undefined}
+            aria-describedby={errors.title ? 'task-title-error' : undefined}
+          />
+          {errors.title && (
+            <p id="task-title-error" className="mt-1 text-sm text-danger-600 dark:text-danger-400" role="alert">
+              {errors.title.message}
+            </p>
+          )}
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="task-title" className="label">
-              Tiêu đề
+            <label htmlFor="task-status" className="label">
+              Trạng thái
             </label>
-            <input
-              id="task-title"
-              type="text"
-              {...register('title')}
-              className="input"
-              placeholder="Tên công việc"
-              autoFocus
-            />
-            {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="task-status" className="label">
-                Trạng thái
-              </label>
-              <select id="task-status" {...register('status')} className="input">
-                <option value="TODO">Cần làm</option>
-                <option value="IN_PROGRESS">Đang làm</option>
-                <option value="DONE">Hoàn thành</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="task-priority" className="label">
-                Ưu tiên
-              </label>
-              <select id="task-priority" {...register('priority')} className="input">
-                <option value="LOW">Thấp</option>
-                <option value="MEDIUM">Trung bình</option>
-                <option value="HIGH">Cao</option>
-                <option value="URGENT">Khẩn cấp</option>
-              </select>
-            </div>
+            <select id="task-status" {...register('status')} className="input">
+              <option value="TODO">Cần làm</option>
+              <option value="IN_PROGRESS">Đang làm</option>
+              <option value="DONE">Hoàn thành</option>
+            </select>
           </div>
 
           <div>
-            <label htmlFor="task-dueDate" className="label">
-              Hạn hoàn thành
+            <label htmlFor="task-priority" className="label">
+              Ưu tiên
             </label>
-            <input id="task-dueDate" type="date" {...register('dueDate')} className="input" />
+            <select id="task-priority" {...register('priority')} className="input">
+              <option value="LOW">Thấp</option>
+              <option value="MEDIUM">Trung bình</option>
+              <option value="HIGH">Cao</option>
+              <option value="URGENT">Khẩn cấp</option>
+            </select>
           </div>
+        </div>
 
-          <div>
-            <label htmlFor="task-description" className="label">
-              Mô tả
-            </label>
-            <textarea
-              id="task-description"
-              {...register('description')}
-              className="input min-h-24 resize-none"
-              placeholder="Mô tả chi tiết công việc (tùy chọn)"
-            />
-            {errors.description && (
-              <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
+        <div>
+          <label htmlFor="task-dueDate" className="label">
+            Hạn hoàn thành
+          </label>
+          <input id="task-dueDate" type="date" {...register('dueDate')} className="input" />
+        </div>
+
+        <div>
+          <label htmlFor="task-description" className="label">
+            Mô tả
+          </label>
+          <textarea
+            id="task-description"
+            {...register('description')}
+            className={`input min-h-24 resize-none ${errors.description ? 'input-error' : ''}`}
+            placeholder="Mô tả chi tiết công việc (tùy chọn)"
+            aria-invalid={errors.description ? 'true' : undefined}
+            aria-describedby={errors.description ? 'task-desc-error' : undefined}
+          />
+          {errors.description && (
+            <p id="task-desc-error" className="mt-1 text-sm text-danger-600 dark:text-danger-400" role="alert">
+              {errors.description.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn-secondary"
+          >
+            Hủy
+          </button>
+          <button type="submit" disabled={createTask.isPending} className="btn-primary">
+            {createTask.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Đang tạo...
+              </>
+            ) : (
+              'Tạo task'
             )}
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
-            >
-              Hủy
-            </button>
-            <button type="submit" disabled={createTask.isPending} className="btn-primary">
-              {createTask.isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Đang tạo...
-                </>
-              ) : (
-                'Tạo task'
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 }

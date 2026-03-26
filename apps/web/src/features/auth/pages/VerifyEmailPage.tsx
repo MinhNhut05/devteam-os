@@ -35,7 +35,7 @@ export default function VerifyEmailPage() {
   if (mutation.isPending || mutation.isIdle) {
     return (
       <div className="text-center py-8">
-        <Loader2 className="w-12 h-12 mx-auto text-indigo-600 dark:text-indigo-400 animate-spin" />
+        <Loader2 className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 animate-spin" />
         <p className="mt-4 text-gray-600 dark:text-gray-400">Đang xác thực email...</p>
       </div>
     );

@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Loader2, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useInviteMember } from '@/hooks/useInviteMember';
+import { Modal } from '@/components/ui';
 
 // Validation schema
 const inviteSchema = z.object({
@@ -67,87 +68,77 @@ export default function InviteMemberModal({ isOpen, onClose, workspaceId }: Invi
     );
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-
-      {/* Modal content */}
-      <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Mời thành viên</h2>
-          <button
-            onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose} title="Mời thành viên">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label htmlFor="invite-email" className="label">
+            Email
+          </label>
+          <input
+            id="invite-email"
+            type="email"
+            {...register('email')}
+            className={`input ${errors.email ? 'input-error' : ''}`}
+            placeholder="member@example.com"
+            autoFocus
+            aria-invalid={errors.email ? 'true' : undefined}
+            aria-describedby={errors.email ? 'invite-email-error' : undefined}
+          />
+          {errors.email && (
+            <p id="invite-email-error" className="mt-1 text-sm text-danger-600 dark:text-danger-400" role="alert">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label htmlFor="invite-email" className="label">
-              Email
-            </label>
-            <input
-              id="invite-email"
-              type="email"
-              {...register('email')}
-              className="input"
-              placeholder="member@example.com"
-              autoFocus
-            />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
-          </div>
+        <div>
+          <label htmlFor="invite-role" className="label">
+            Vai trò
+          </label>
+          <select
+            id="invite-role"
+            {...register('role')}
+            className="input"
+          >
+            {roleOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label} — {option.description}
+              </option>
+            ))}
+          </select>
+          {errors.role && (
+            <p className="mt-1 text-sm text-danger-600 dark:text-danger-400" role="alert">
+              {errors.role.message}
+            </p>
+          )}
+        </div>
 
-          <div>
-            <label htmlFor="invite-role" className="label">
-              Vai trò
-            </label>
-            <select
-              id="invite-role"
-              {...register('role')}
-              className="input"
-            >
-              {roleOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label} — {option.description}
-                </option>
-              ))}
-            </select>
-            {errors.role && <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>}
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-            >
-              Hủy
-            </button>
-            <button
-              type="submit"
-              disabled={inviteMember.isPending}
-              className="btn-primary"
-            >
-              {inviteMember.isPending ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Đang gửi...
-                </>
-              ) : (
-                'Gửi lời mời'
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        {/* Actions */}
+        <div className="flex justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn-secondary"
+          >
+            Hủy
+          </button>
+          <button
+            type="submit"
+            disabled={inviteMember.isPending}
+            className="btn-primary"
+          >
+            {inviteMember.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Đang gửi...
+              </>
+            ) : (
+              'Gửi lời mời'
+            )}
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 }

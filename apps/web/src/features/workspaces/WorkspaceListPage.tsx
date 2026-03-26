@@ -8,7 +8,7 @@ import EmptyState from '@/components/EmptyState';
 
 // Role badge color mapping
 const roleBadgeColors: Record<string, string> = {
-  OWNER: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
+  OWNER: 'bg-primary-100 text-primary-700 dark:bg-primary-900/50 dark:text-primary-300',
   ADMIN: 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300',
   MEMBER: 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300',
   VIEWER: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
@@ -98,7 +98,7 @@ export default function WorkspaceListPage() {
             <button
               key={ws.id}
               onClick={() => handleSelect(ws)}
-              className="card p-5 text-left hover:ring-2 hover:ring-indigo-500 hover:shadow-md transition-all cursor-pointer"
+              className="card p-5 text-left hover:ring-2 hover:ring-primary-500 hover:shadow-md transition-all cursor-pointer"
             >
               <div className="flex items-center gap-3 mb-3">
                 {/* Logo or initial avatar */}
@@ -109,7 +109,7 @@ export default function WorkspaceListPage() {
                     className="w-10 h-10 rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-semibold text-lg">
+                  <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 font-semibold text-lg">
                     {ws.name.charAt(0).toUpperCase()}
                   </div>
                 )}
