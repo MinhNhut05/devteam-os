@@ -1,0 +1,8 @@
+{
+  "extends": "./react-library.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "noEmit": true
+  }
+}

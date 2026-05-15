@@ -53,7 +53,7 @@ DevTeamOS — webapp quan ly tien do du an cho freelancers va startup teams (2-1
 | `backend.md` | `apps/api/**/*.ts` | NestJS patterns, modules, DTOs, guards |
 | `frontend.md` | `apps/web/**/*.ts,tsx` | React, Zustand, TanStack Query, Tailwind |
 | `prisma.md` | `*.prisma` | Schema conventions, relations, enums |
-| `shared.md` | `packages/shared/**` | Shared types, export patterns |
+| `shared.md` | `packages/{contracts,utils,ui}/**` | Shared contracts, utils, UI export patterns |
 | `anti-hallucination.md` | `**/*.ts,tsx` | **BAT BUOC** — doc code truoc khi viet, khong tu bia |
 | `code-quality.md` | `**/*.ts,tsx` | Naming, DRY, function rules, pitfalls |
 | `review-checklist.md` | `**/*.ts,tsx` | Security, performance, architecture checklist khi review |

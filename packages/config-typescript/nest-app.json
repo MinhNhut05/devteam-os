@@ -1,0 +1,17 @@
+{
+  "extends": "./node-library.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": false,
+    "strictBindCallApply": true,
+    "strictNullChecks": true
+  }
+}

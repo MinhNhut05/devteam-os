@@ -10,7 +10,7 @@ docker compose up -d              # Start database (port 5433)
 pnpm dev                          # Start both API and web in parallel
 
 # Start individual apps
-pnpm --filter api dev             # NestJS API on localhost:3000
+pnpm --filter api dev             # NestJS API on localhost:3001
 pnpm --filter web dev             # Vite frontend on localhost:5173
 ```
 
@@ -30,6 +30,7 @@ npx prisma db push                # Push schema changes (dev only)
 pnpm build                        # Build all packages
 pnpm --filter api build           # Build API only
 pnpm --filter web build           # Build frontend only
+pnpm -r typecheck                 # Type-check all packages
 pnpm --filter api test            # Run API tests (Jest)
 pnpm --filter api test:watch      # Run tests in watch mode
 ```
@@ -49,7 +50,7 @@ JWT_REFRESH_EXPIRES_IN="7d"
 
 GOOGLE_CLIENT_ID="xxx"
 GOOGLE_CLIENT_SECRET="xxx"
-GOOGLE_CALLBACK_URL="http://localhost:3000/auth/google/callback"
+GOOGLE_CALLBACK_URL="http://localhost:3001/api/auth/google/callback"
 
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT=587
@@ -61,15 +62,16 @@ AI_API_URL="https://manager.devteamos.me/v1/messages"
 
 FRONTEND_URL="http://localhost:5173"
 UPLOAD_DIR="./uploads"
+PORT=3001
 ```
 
 ### Web (.env in apps/web)
 
 ```env
-VITE_API_URL="http://localhost:3000/api"
-VITE_WS_URL="ws://localhost:3000"
+VITE_API_URL="http://localhost:3001/api"
+VITE_WS_URL="ws://localhost:3001"
 ```
 
 ---
 
-*Last updated: 2026-02-27*
+*Last updated: 2026-05-14*

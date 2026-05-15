@@ -1,0 +1,7 @@
+{
+  "extends": "@devteamos/config-typescript/node-library.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src"]
+}

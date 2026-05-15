@@ -1,0 +1,21 @@
+{
+  "name": "@devteamos/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./types": "./src/types.ts",
+    "./schemas/common": "./src/schemas/common.ts",
+    "./contracts": "./src/contracts/index.ts",
+    "./events": "./src/events/index.ts",
+    "./events/socket-events": "./src/events/socket-events.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@devteamos/config-typescript": "workspace:*"
+  }
+}

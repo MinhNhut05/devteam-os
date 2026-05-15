@@ -31,7 +31,9 @@
 | 2026-03-06 | Google OAuth callback dung one-time code + CacheModule | Tranh dua access token vao URL, giam ro ri token qua logs/history/referrer | `GET /auth/google/callback?code=...` + `POST /auth/google/exchange` |
 | 2026-03-06 | Strict throttling cho auth endpoints | Giam brute force va abuse cho login/register/forgot-password ma van giu UX chap nhan duoc | Global 30/min + route-specific limits |
 | 2026-03-06 | Password reset dung `resetNonce` single-use | JWT reset token expiry alone khong du, can chan token reuse sau khi reset thanh cong | Token reset bi vo hieu hoa sau 1 lan dung |
+| 2026-05-14 | Docker Compose + Caddy thay Nginx + PM2 cho production target | Muon 1 deploy model nhat quan voi Postgres/Redis/BullMQ tren VPS, Caddy tu dong TLS va healthcheck de hon cho solo dev | Phase 0B chuan bi health endpoint; infra chi tiet lam o phase sau |
+| 2026-05-15 | Tach workspace packages @devteamos/{config-typescript,config-eslint,contracts,ui,utils} | Giam drift BE/FE va chuan bi ts-rest/UI reuse, nhung van export TS source truc tiep de tranh build step som | Phase 1 tao package moi, apps extend shared configs, packages/shared duoc merge vao contracts roi xoa |
 
 ---
 
-*Last updated: 2026-03-06*
+*Last updated: 2026-05-15*

@@ -4,15 +4,15 @@
 
 See: .context/PROJECT.md
 **Core value:** UX/UI xuat sac + AI features tich hop
-**Current focus:** Phase 7 (Polish) — DONE
+**Current focus:** Production scale cleanup/restructure — Phase 1 done
 
 ## Current Position
 
-Phase: 7 of 7 (Polish & Deploy) — DONE (DEPLOY-01..04)
+Phase: Production Scale Phase 1 (Monorepo Restructure) — DONE
 Branch: `main` (code truc tiep tren main)
-Status: MVP complete — error boundary, skeleton, empty states, responsive done
-Last activity: 2026-03-16 — Phase 7 Polish commit + push
-Progress: [####################] 100%
+Status: MVP complete; production-grade cleanup/restructure started
+Last activity: 2026-05-15 — Phase 1 workspace packages + shared configs
+Progress: MVP [####################] 100%; Production cleanup Phase 1 done
 
 ## What's Done (Summary)
 
@@ -53,16 +53,30 @@ Progress: [####################] 100%
 
 ## What's Next
 
-- MVP Done! Manual browser test cuoi cung
-- Co the: deploy production (DEPLOY-05..10), viet README, demo
+- Phase 2: observability (Pino + Sentry)
+- Then Phase 3: DB hardening
 
 ## Known Warnings (non-blocking)
 
 - invite het han van chan re-invite (check duplicate ko xet expiresAt)
 - slug race condition chua map Prisma P2002
 - Vite build large chunk warning (>500kB) — code-split neu can
+- Lint baseline has existing API prettier issues + 2 web react-hooks warnings
 
 ## Session Log
+
+### 2026-05-15
+
+- Phase 1: added packages/config-typescript, config-eslint, contracts, ui, utils
+- Wired API/web tsconfig + ESLint to shared config packages
+- Merged packages/shared content into packages/contracts and removed packages/shared
+- Verified pnpm -r typecheck and pnpm -r build pass
+
+### 2026-05-14
+
+- Phase 0A: updated gitignore, moved legacy test-api script, archived closed branch contexts
+- Phase 0B: added typecheck scripts, standardized dev port 3001, added /health endpoint
+- Started production-scale cleanup/restructure plan; next is Phase 1 monorepo packages
 
 ### 2026-03-16
 
@@ -77,4 +91,4 @@ Progress: [####################] 100%
 ---
 
 *This file must stay under 100 lines. Move old entries to archive when needed.*
-*Last updated: 2026-03-16*
+*Last updated: 2026-05-15*

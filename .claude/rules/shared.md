@@ -1,41 +1,47 @@
 ---
 paths:
-  - "packages/shared/**/*.ts"
+  - "packages/contracts/**/*.ts"
+  - "packages/utils/**/*.ts"
+  - "packages/ui/**/*.ts"
+  - "packages/ui/**/*.tsx"
 ---
 
-# Shared Package Rules
+# Shared Workspace Package Rules
 
 ## Purpose
 
-Package `packages/shared/` chua types va constants dung chung giua `apps/api` va `apps/web`.
+Workspace packages chua contract/domain types, pure utilities, va UI primitives dung chung giua `apps/api` va `apps/web`.
 
 ## Structure
 
 ```
-packages/shared/src/
+packages/contracts/src/
 ├── index.ts          # Re-exports
-└── types.ts          # Shared TypeScript types
+└── types.ts          # Shared domain TypeScript types
+
+packages/utils/src/   # Pure helpers only
+packages/ui/src/      # Reusable React components
 ```
 
 ## Rules
 
-- CHI chua types, interfaces, enums, constants
-- KHONG chua business logic, utility functions, hay runtime code
-- KHONG import tu `apps/api` hay `apps/web` (shared la dependency, khong phu thuoc nguoc)
+- `packages/contracts`: chi chua types, interfaces, schemas, constants, va future ts-rest contracts
+- `packages/utils`: pure helpers, khong phu thuoc React/Nest/Prisma
+- `packages/ui`: reusable React components, khong import tu feature code
+- KHONG import tu `apps/api` hay `apps/web` (packages la dependency, khong phu thuoc nguoc)
 - Moi type/interface PHAI export tu `index.ts`
 - Naming: PascalCase cho types/interfaces, UPPER_SNAKE_CASE cho constants
 
 ## Export Pattern
 
 ```typescript
-// index.ts
-export type { UserResponse, TaskResponse } from './types';
-export { TaskStatus, Priority } from './types';
+// packages/contracts/src/index.ts
+export * from './types';
 ```
 
 ## Import Pattern (tu apps)
 
 ```typescript
 // Trong apps/api hoac apps/web
-import type { UserResponse } from '@devteamos/shared';
+import type { User } from '@devteamos/contracts';
 ```

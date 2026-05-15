@@ -1,0 +1,12 @@
+{
+  "name": "@devteamos/config-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./base.json": "./base.json",
+    "./node-library.json": "./node-library.json",
+    "./react-library.json": "./react-library.json",
+    "./vite-app.json": "./vite-app.json",
+    "./nest-app.json": "./nest-app.json"
+  }
+}
