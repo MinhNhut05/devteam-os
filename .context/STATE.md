@@ -4,15 +4,15 @@
 
 See: .context/PROJECT.md
 **Core value:** UX/UI xuat sac + AI features tich hop
-**Current focus:** Production scale cleanup/restructure — Phase 1 done
+**Current focus:** Production scale cleanup/restructure — Phase 2 done
 
 ## Current Position
 
-Phase: Production Scale Phase 1 (Monorepo Restructure) — DONE
+Phase: Production Scale Phase 2 (Observability) — DONE
 Branch: `main` (code truc tiep tren main)
 Status: MVP complete; production-grade cleanup/restructure started
-Last activity: 2026-05-15 — Phase 1 workspace packages + shared configs
-Progress: MVP [####################] 100%; Production cleanup Phase 1 done
+Last activity: 2026-05-15 — Phase 2 Pino + Sentry observability
+Progress: MVP [####################] 100%; Production cleanup Phase 2 done
 
 ## What's Done (Summary)
 
@@ -53,8 +53,8 @@ Progress: MVP [####################] 100%; Production cleanup Phase 1 done
 
 ## What's Next
 
-- Phase 2: observability (Pino + Sentry)
-- Then Phase 3: DB hardening
+- Phase 3: DB hardening
+- Then Phase 4: Redis + Socket.IO adapter
 
 ## Known Warnings (non-blocking)
 
@@ -67,6 +67,10 @@ Progress: MVP [####################] 100%; Production cleanup Phase 1 done
 
 ### 2026-05-15
 
+- Phase 2: added nestjs-pino request logging + Sentry API/web init
+- Added Sentry exception filter for non-HttpException capture
+- Replaced API console logs in bootstrap/tasks/comments with Nest Logger
+- Verified pnpm -r typecheck, pnpm -r build, and /health smoke pass
 - Phase 1: added packages/config-typescript, config-eslint, contracts, ui, utils
 - Wired API/web tsconfig + ESLint to shared config packages
 - Merged packages/shared content into packages/contracts and removed packages/shared
@@ -83,10 +87,6 @@ Progress: MVP [####################] 100%; Production cleanup Phase 1 done
 - Phase 7 Polish: review 20 files, tsc pass, build pass, 0 bugs found
 - Updated REQUIREMENTS: RT-01..10, DASH-01..07 → [x], DEPLOY-01..04 → [x]
 - Commit + push to origin (MinhNhut05)
-
-### 2026-03-15
-
-- Regression verification: tsc pass, build pass, code scan clean
 
 ---
 

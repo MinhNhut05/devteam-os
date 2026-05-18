@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { NotificationType } from '@prisma/client';
@@ -12,6 +13,8 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
+  private readonly logger = new Logger(CommentsService.name);
+
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
@@ -121,7 +124,10 @@ export class CommentsService {
         }
       }
     } catch (error) {
-      console.error('[CommentsService] Notification/WS error:', error);
+      this.logger.error(
+        'Failed to create notifications or emit websocket events for comment',
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
     return comment;

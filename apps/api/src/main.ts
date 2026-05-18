@@ -3,11 +3,19 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { Logger as PinoNestLogger } from 'nestjs-pino';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { initSentry } from './observability/sentry';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  initSentry();
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
+  const logger = app.get(PinoNestLogger);
+  app.useLogger(logger);
 
   // Serve uploaded files (avatars, attachments) as static assets
   const uploadDir = process.env.UPLOAD_DIR || './uploads';
@@ -50,8 +58,8 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3001;
   await app.listen(port);
-  console.log(`🚀 API running on http://localhost:${port}`);
-  console.log(`📚 Swagger docs at http://localhost:${port}/api/docs`);
+  logger.log(`API running on http://localhost:${port}`, 'Bootstrap');
+  logger.log(`Swagger docs at http://localhost:${port}/api/docs`, 'Bootstrap');
 }
 
 bootstrap();

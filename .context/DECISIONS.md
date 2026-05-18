@@ -33,6 +33,7 @@
 | 2026-03-06 | Password reset dung `resetNonce` single-use | JWT reset token expiry alone khong du, can chan token reuse sau khi reset thanh cong | Token reset bi vo hieu hoa sau 1 lan dung |
 | 2026-05-14 | Docker Compose + Caddy thay Nginx + PM2 cho production target | Muon 1 deploy model nhat quan voi Postgres/Redis/BullMQ tren VPS, Caddy tu dong TLS va healthcheck de hon cho solo dev | Phase 0B chuan bi health endpoint; infra chi tiet lam o phase sau |
 | 2026-05-15 | Tach workspace packages @devteamos/{config-typescript,config-eslint,contracts,ui,utils} | Giam drift BE/FE va chuan bi ts-rest/UI reuse, nhung van export TS source truc tiep de tranh build step som | Phase 1 tao package moi, apps extend shared configs, packages/shared duoc merge vao contracts roi xoa |
+| 2026-05-15 | Pino lam Nest logger chinh + Sentry capture non-HttpException | Can JSON logs co request id va production error tracking, nhung khong doi response format HTTPException hien co | Phase 2 them nestjs-pino, @sentry/node, @sentry/react; SENTRY_DSN rong thi capture disabled |
 
 ---
 

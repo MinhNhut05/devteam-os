@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   BadRequestException,
   ConflictException,
@@ -17,6 +18,8 @@ import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
 
 @Injectable()
 export class TasksService {
+  private readonly logger = new Logger(TasksService.name);
+
   constructor(
     private prisma: PrismaService,
     private notificationsGateway: NotificationsGateway,
@@ -66,7 +69,10 @@ export class TasksService {
         );
       }
     } catch (error) {
-      console.error('[TasksService] WS emit task_created error:', error);
+      this.logger.error(
+        'Failed to emit task_created websocket event',
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
     return createdTask;
@@ -210,7 +216,10 @@ export class TasksService {
         );
       }
     } catch (error) {
-      console.error('[TasksService] WS emit task_updated error:', error);
+      this.logger.error(
+        'Failed to emit task_updated websocket event',
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
     return updatedTask;
@@ -250,7 +259,10 @@ export class TasksService {
         workspaceId = project.workspaceId;
       }
     } catch (error) {
-      console.error('[TasksService] Query workspaceId for delete error:', error);
+      this.logger.error(
+        'Failed to query workspaceId before deleting task',
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
     // Thu thap tat ca attachment paths
@@ -279,7 +291,10 @@ export class TasksService {
         );
       }
     } catch (error) {
-      console.error('[TasksService] WS emit task_deleted error:', error);
+      this.logger.error(
+        'Failed to emit task_deleted websocket event',
+        error instanceof Error ? error.stack : String(error),
+      );
     }
 
     return { message: 'Task deleted successfully' };

@@ -63,6 +63,11 @@ AI_API_URL="https://manager.devteamos.me/v1/messages"
 FRONTEND_URL="http://localhost:5173"
 UPLOAD_DIR="./uploads"
 PORT=3001
+LOG_LEVEL="info"
+LOG_PRETTY="true"
+SENTRY_DSN=""
+SENTRY_ENVIRONMENT="development"
+SENTRY_TRACES_SAMPLE_RATE=0.1
 ```
 
 ### Web (.env in apps/web)
@@ -70,8 +75,11 @@ PORT=3001
 ```env
 VITE_API_URL="http://localhost:3001/api"
 VITE_WS_URL="ws://localhost:3001"
+VITE_SENTRY_DSN=""
+VITE_SENTRY_ENVIRONMENT="development"
+VITE_SENTRY_TRACES_SAMPLE_RATE=0.1
 ```
 
 ---
 
-*Last updated: 2026-05-14*
+*Last updated: 2026-05-15*
