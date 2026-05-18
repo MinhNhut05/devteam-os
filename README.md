@@ -4,11 +4,6 @@
 
 DevTeamOS là webapp quản lý tiến độ dự án, hỗ trợ các nhóm nhỏ (2-15 người) theo dõi công việc và cộng tác hiệu quả.
 
-## Thông tin sinh viên
-
-| Họ và tên | MSSV | Lớp |
-|-----------|------|-----|
-| Huỳnh Đức Nhân | 226610 | DH22TIN08 |
 
 ## Công nghệ sử dụng
 
