@@ -1,47 +1,41 @@
-# DevTeamOS - Hệ thống quản lý tiến độ dự án
+# DevTeamOS
 
-## Giới thiệu
+Project management platform for small teams.
 
-DevTeamOS là webapp quản lý tiến độ dự án, hỗ trợ các nhóm nhỏ (2-15 người) theo dõi công việc và cộng tác hiệu quả.
+DevTeamOS is a Kanban-style project management system for freelancers and startup teams. It combines workspace/project structure, task tracking, role-based access, and a monorepo setup that is easy to extend.
 
+## Highlights
 
-## Công nghệ sử dụng
+- Workspace and project management
+- Kanban board for task planning and execution
+- Role-based access control for Owner, Admin, Member, and Viewer
+- Shared package structure for frontend and backend code
+- Docker and pnpm workflows for local development
 
-- **Frontend**: React 18, Vite, TailwindCSS
-- **Backend**: NestJS, Prisma ORM
-- **Database**: PostgreSQL
-- **Khác**: Docker, pnpm workspaces
+## Stack
 
-## Chức năng chính
+- Frontend: React 18, Vite, Tailwind CSS
+- Backend: NestJS, Prisma ORM
+- Database: PostgreSQL
+- Infra: Docker, pnpm workspaces
 
-- Đăng nhập / Đăng ký tài khoản
-- Quản lý Workspace và Project
-- Kanban board quản lý Task
-- Phân quyền thành viên (Owner, Admin, Member, Viewer)
-
-## Cài đặt và chạy
+## Local development
 
 ```bash
-# Clone repo
-git clone https://github.com/le-lee-05/doan2_DH22TIN08_HuynhDucNhan_quanlyproject.git
-
-# Cài dependencies
+git clone https://github.com/MinhNhut05/devteam-os.git
+cd devteam-os
 pnpm install
-
-# Chạy database
 docker compose up -d
-
-# Chạy ứng dụng
 pnpm dev
 ```
 
-## Cấu trúc thư mục
+## Repository layout
 
 ```
 ├── apps/
 │   ├── api/          # Backend NestJS
 │   └── web/          # Frontend React
 ├── packages/
-│   └── shared/       # Types dùng chung
+│   └── shared/       # Shared types
 └── docker-compose.yml
 ```
