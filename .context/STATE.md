@@ -8,11 +8,11 @@ See: .context/PROJECT.md
 
 ## Current Position
 
-Phase: Production Scale Phase 2 (Observability) — DONE
+Phase: Production Scale Phase 3 (DB Hardening) — DONE
 Branch: `main` (code truc tiep tren main)
-Status: MVP complete; production-grade cleanup/restructure started
-Last activity: 2026-05-15 — Phase 2 Pino + Sentry observability
-Progress: MVP [####################] 100%; Production cleanup Phase 2 done
+Status: MVP complete; production-grade cleanup/restructure in progress
+Last activity: 2026-05-20 — Phase 3 indexes + baseline migration squash
+Progress: MVP [####################] 100%; Production cleanup Phase 3 done
 
 ## What's Done (Summary)
 
@@ -53,8 +53,8 @@ Progress: MVP [####################] 100%; Production cleanup Phase 2 done
 
 ## What's Next
 
-- Phase 3: DB hardening
-- Then Phase 4: Redis + Socket.IO adapter
+- Phase 4: Redis + Socket.IO adapter
+- Then Phase 5: BullMQ for email/notifications/AI
 
 ## Known Warnings (non-blocking)
 
@@ -64,6 +64,14 @@ Progress: MVP [####################] 100%; Production cleanup Phase 2 done
 - Lint baseline has existing API prettier issues + 2 web react-hooks warnings
 
 ## Session Log
+
+### 2026-05-20
+
+- Phase 3: added 9 hot-path indexes (Task, Project, Comment, Attachment, ChecklistItem, Activity, Notification, WorkspaceMember)
+- Squashed 4 dev migrations into single `20260520111322_baseline` (no prod data; clean slate)
+- Backed up local dev DB to `database/devteamos_dump.sql` (gitignored) before reset
+- Added `MIGRATIONS.md` at repo root: policy, backup/restore, destructive guard rules
+- Verified pnpm -r typecheck, pnpm -r build, /health smoke pass
 
 ### 2026-05-15
 
@@ -82,13 +90,7 @@ Progress: MVP [####################] 100%; Production cleanup Phase 2 done
 - Phase 0B: added typecheck scripts, standardized dev port 3001, added /health endpoint
 - Started production-scale cleanup/restructure plan; next is Phase 1 monorepo packages
 
-### 2026-03-16
-
-- Phase 7 Polish: review 20 files, tsc pass, build pass, 0 bugs found
-- Updated REQUIREMENTS: RT-01..10, DASH-01..07 → [x], DEPLOY-01..04 → [x]
-- Commit + push to origin (MinhNhut05)
-
 ---
 
 *This file must stay under 100 lines. Move old entries to archive when needed.*
-*Last updated: 2026-05-15*
+*Last updated: 2026-05-20*

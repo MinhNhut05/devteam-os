@@ -33,6 +33,7 @@ CREATE TABLE "User" (
     "providerId" TEXT,
     "theme" "Theme" NOT NULL DEFAULT 'SYSTEM',
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
+    "resetNonce" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -84,6 +85,7 @@ CREATE TABLE "Project" (
     "description" TEXT,
     "color" TEXT NOT NULL DEFAULT '#6366f1',
     "icon" TEXT,
+    "image" TEXT,
     "status" "ProjectStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -169,11 +171,42 @@ CREATE TABLE "Notification" (
     CONSTRAINT "Notification_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "RefreshToken" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expiresAt" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "revoked" BOOLEAN NOT NULL DEFAULT false,
+    "device" TEXT,
+    "ip" TEXT,
+
+    CONSTRAINT "RefreshToken_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Activity" (
+    "id" TEXT NOT NULL,
+    "workspaceId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "action" TEXT NOT NULL,
+    "entityType" TEXT NOT NULL,
+    "entityId" TEXT NOT NULL,
+    "metadata" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Workspace_slug_key" ON "Workspace"("slug");
+
+-- CreateIndex
+CREATE INDEX "WorkspaceMember_userId_idx" ON "WorkspaceMember"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WorkspaceMember_userId_workspaceId_key" ON "WorkspaceMember"("userId", "workspaceId");
@@ -183,6 +216,39 @@ CREATE UNIQUE INDEX "WorkspaceInvitation_token_key" ON "WorkspaceInvitation"("to
 
 -- CreateIndex
 CREATE UNIQUE INDEX "WorkspaceInvitation_workspaceId_email_key" ON "WorkspaceInvitation"("workspaceId", "email");
+
+-- CreateIndex
+CREATE INDEX "Project_workspaceId_idx" ON "Project"("workspaceId");
+
+-- CreateIndex
+CREATE INDEX "Task_projectId_status_idx" ON "Task"("projectId", "status");
+
+-- CreateIndex
+CREATE INDEX "Task_projectId_parentId_idx" ON "Task"("projectId", "parentId");
+
+-- CreateIndex
+CREATE INDEX "ChecklistItem_taskId_idx" ON "ChecklistItem"("taskId");
+
+-- CreateIndex
+CREATE INDEX "Attachment_taskId_idx" ON "Attachment"("taskId");
+
+-- CreateIndex
+CREATE INDEX "Comment_taskId_idx" ON "Comment"("taskId");
+
+-- CreateIndex
+CREATE INDEX "Notification_userId_read_createdAt_idx" ON "Notification"("userId", "read", "createdAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "RefreshToken_token_key" ON "RefreshToken"("token");
+
+-- CreateIndex
+CREATE INDEX "RefreshToken_userId_revoked_idx" ON "RefreshToken"("userId", "revoked");
+
+-- CreateIndex
+CREATE INDEX "RefreshToken_expiresAt_idx" ON "RefreshToken"("expiresAt");
+
+-- CreateIndex
+CREATE INDEX "Activity_workspaceId_createdAt_idx" ON "Activity"("workspaceId", "createdAt");
 
 -- AddForeignKey
 ALTER TABLE "WorkspaceMember" ADD CONSTRAINT "WorkspaceMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -222,3 +288,12 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "RefreshToken" ADD CONSTRAINT "RefreshToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_workspaceId_fkey" FOREIGN KEY ("workspaceId") REFERENCES "Workspace"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
