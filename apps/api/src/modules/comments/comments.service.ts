@@ -4,10 +4,15 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
 import { NotificationType } from '@prisma/client';
+import type { Queue } from 'bullmq';
 import { PrismaService } from '@/prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
-import { NotificationsGateway } from '../notifications/notifications.gateway';
+import type {
+  EmitUserPayload,
+  EmitWorkspacePayload,
+} from '../notifications/notifications.processor';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -18,7 +23,8 @@ export class CommentsService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
-    private notificationsGateway: NotificationsGateway,
+    @InjectQueue('notifications')
+    private notificationsQueue: Queue<EmitWorkspacePayload | EmitUserPayload>,
   ) {}
 
   async findAll(taskId: string) {
@@ -76,15 +82,15 @@ export class CommentsService {
       });
 
       if (taskWithProject?.project) {
-        // Emit comment_added to workspace
-        this.notificationsGateway.emitToWorkspace(
-          taskWithProject.project.workspaceId,
-          'comment_added',
-          comment,
-        );
+        // Enqueue comment_added broadcast
+        await this.notificationsQueue.add('emit-workspace', {
+          workspaceId: taskWithProject.project.workspaceId,
+          event: 'comment_added',
+          data: comment,
+        });
       }
 
-      // Tao mention notifications
+      // Mention notifications: create in DB sync, emit via queue
       if (dto.mentions && dto.mentions.length > 0) {
         const mentionNotifs = await this.notificationsService.createMention(
           dto.mentions,
@@ -93,15 +99,15 @@ export class CommentsService {
           taskId,
         );
         for (const notif of mentionNotifs) {
-          this.notificationsGateway.emitToUser(
-            notif.userId,
-            'notification',
-            notif,
-          );
+          await this.notificationsQueue.add('emit-user', {
+            userId: notif.userId,
+            event: 'notification',
+            data: notif,
+          });
         }
       }
 
-      // Tao COMMENT_ADDED notification cho assignees (tru nguoi comment + nguoi da mention)
+      // COMMENT_ADDED notifications for assignees (excluding commenter + already-mentioned)
       if (taskWithProject?.assignees) {
         const mentionSet = new Set(dto.mentions ?? []);
         const assigneesToNotify = taskWithProject.assignees
@@ -116,11 +122,11 @@ export class CommentsService {
             message: `Trong task "${task.title}"`,
             data: { taskId },
           });
-          this.notificationsGateway.emitToUser(
-            assigneeId,
-            'notification',
-            notif,
-          );
+          await this.notificationsQueue.add('emit-user', {
+            userId: assigneeId,
+            event: 'notification',
+            data: notif,
+          });
         }
       }
     } catch (error) {

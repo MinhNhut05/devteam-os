@@ -49,28 +49,17 @@ interface AiProgressAnalyzerProps {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function AiProgressAnalyzer({ projectId }: AiProgressAnalyzerProps) {
-  const [result, setResult] = useState<AiAnalyzeProgressResponse | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const { mutate, isPending } = useAiAnalyzeProgress();
+  const { mutate, data: result, isPending, reset } = useAiAnalyzeProgress();
 
   function handleAnalyze() {
-    setResult(null);
+    reset();
     setIsVisible(true);
-    mutate(
-      { projectId },
-      {
-        onSuccess: (data) => {
-          setResult(data);
-        },
-        onError: () => {
-          setIsVisible(false);
-        },
-      },
-    );
+    mutate({ projectId });
   }
 
   function handleClose() {
-    setResult(null);
+    reset();
     setIsVisible(false);
   }
 

@@ -5,11 +5,16 @@ import {
   BadRequestException,
   ConflictException,
 } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
 import * as fs from 'fs';
 import * as path from 'path';
 import { TaskStatus } from '@prisma/client';
+import type { Queue } from 'bullmq';
 import { PrismaService } from '@/prisma/prisma.service';
-import { NotificationsGateway } from '../notifications/notifications.gateway';
+import type {
+  EmitUserPayload,
+  EmitWorkspacePayload,
+} from '../notifications/notifications.processor';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ReorderTasksDto } from './dto/reorder-tasks.dto';
@@ -22,7 +27,8 @@ export class TasksService {
 
   constructor(
     private prisma: PrismaService,
-    private notificationsGateway: NotificationsGateway,
+    @InjectQueue('notifications')
+    private notificationsQueue: Queue<EmitWorkspacePayload | EmitUserPayload>,
   ) {}
 
   // ============================================================
@@ -55,22 +61,22 @@ export class TasksService {
       },
     });
 
-    // Fire-and-forget: emit WebSocket event
+    // Fire-and-forget: enqueue WebSocket emit
     try {
       const project = await this.prisma.project.findUnique({
         where: { id: projectId },
         select: { workspaceId: true },
       });
       if (project) {
-        this.notificationsGateway.emitToWorkspace(
-          project.workspaceId,
-          'task_created',
-          createdTask,
-        );
+        await this.notificationsQueue.add('emit-workspace', {
+          workspaceId: project.workspaceId,
+          event: 'task_created',
+          data: createdTask,
+        });
       }
     } catch (error) {
       this.logger.error(
-        'Failed to emit task_created websocket event',
+        'Failed to enqueue task_created websocket emit',
         error instanceof Error ? error.stack : String(error),
       );
     }
@@ -202,22 +208,22 @@ export class TasksService {
       data,
     });
 
-    // Fire-and-forget: emit WebSocket event
+    // Fire-and-forget: enqueue WebSocket emit
     try {
       const project = await this.prisma.project.findUnique({
         where: { id: updatedTask.projectId },
         select: { workspaceId: true },
       });
       if (project) {
-        this.notificationsGateway.emitToWorkspace(
-          project.workspaceId,
-          'task_updated',
-          updatedTask,
-        );
+        await this.notificationsQueue.add('emit-workspace', {
+          workspaceId: project.workspaceId,
+          event: 'task_updated',
+          data: updatedTask,
+        });
       }
     } catch (error) {
       this.logger.error(
-        'Failed to emit task_updated websocket event',
+        'Failed to enqueue task_updated websocket emit',
         error instanceof Error ? error.stack : String(error),
       );
     }
@@ -281,18 +287,18 @@ export class TasksService {
 
     await this.prisma.task.delete({ where: { id } });
 
-    // Fire-and-forget: emit WebSocket event SAU khi xoa
+    // Fire-and-forget: enqueue WebSocket emit SAU khi xoa
     try {
       if (workspaceId) {
-        this.notificationsGateway.emitToWorkspace(
+        await this.notificationsQueue.add('emit-workspace', {
           workspaceId,
-          'task_deleted',
-          { taskId: id, projectId: task.projectId },
-        );
+          event: 'task_deleted',
+          data: { taskId: id, projectId: task.projectId },
+        });
       }
     } catch (error) {
       this.logger.error(
-        'Failed to emit task_deleted websocket event',
+        'Failed to enqueue task_deleted websocket emit',
         error instanceof Error ? error.stack : String(error),
       );
     }

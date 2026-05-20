@@ -1,12 +1,18 @@
 import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+import type { Queue } from 'bullmq';
 import { JwtAuthGuard } from '@/common/guards/jwt-auth.guard';
-import { AiService } from './ai.service';
 import { SplitTaskDto } from './dto/split-task.dto';
 import { AnalyzeProgressDto } from './dto/analyze-progress.dto';
 import { SuggestAssigneeDto } from './dto/suggest-assignee.dto';
 import { CodeAssistDto } from './dto/code-assist.dto';
+
+export interface AiJobAccepted {
+  jobId: string;
+  status: 'pending';
+}
 
 @ApiTags('AI')
 @Controller('ai')
@@ -14,92 +20,49 @@ import { CodeAssistDto } from './dto/code-assist.dto';
 @ApiBearerAuth()
 @Throttle({ ai: { limit: 5, ttl: 60000 } })
 export class AiController {
-  constructor(private readonly aiService: AiService) {}
+  constructor(@InjectQueue('ai') private readonly aiQueue: Queue) {}
 
   @Post('split-task')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'AI gợi ý chia nhỏ task thành subtasks' })
-  @ApiResponse({
-    status: 200,
-    description: 'Danh sách subtasks được gợi ý',
-    schema: {
-      example: {
-        suggestions: [
-          { title: 'Thiết kế database schema', priority: 'HIGH', estimatedTime: '2 giờ' },
-        ],
-      },
-    },
-  })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'AI gợi ý chia nhỏ task — async qua BullMQ, poll GET /ai/jobs/:jobId' })
+  @ApiResponse({ status: 202, description: 'Job đã được nhận', schema: { example: { jobId: '12', status: 'pending' } } })
   @ApiResponse({ status: 400, description: 'description is required' })
   @ApiResponse({ status: 429, description: 'Too many AI requests' })
-  @ApiResponse({ status: 503, description: 'AI service unavailable' })
-  @ApiResponse({ status: 504, description: 'AI service timeout' })
-  async splitTask(@Body() dto: SplitTaskDto) {
-    return this.aiService.splitTask(dto);
+  async splitTask(@Body() dto: SplitTaskDto): Promise<AiJobAccepted> {
+    const job = await this.aiQueue.add('split-task', dto);
+    return { jobId: String(job.id), status: 'pending' };
   }
 
   @Post('analyze-progress')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'AI phân tích tiến độ project' })
-  @ApiResponse({
-    status: 200,
-    description: 'Báo cáo phân tích tiến độ',
-    schema: {
-      example: {
-        analysis: 'Dự án đang tiến triển tốt...',
-        overallHealth: 'GOOD',
-        risks: [{ description: 'Có 2 task bị delay', severity: 'MEDIUM' }],
-        recommendations: ['Ưu tiên task có deadline gần nhất'],
-      },
-    },
-  })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'AI phân tích tiến độ project — async, poll GET /ai/jobs/:jobId' })
+  @ApiResponse({ status: 202, description: 'Job đã được nhận' })
   @ApiResponse({ status: 400, description: 'projectId is required' })
-  @ApiResponse({ status: 404, description: 'Project not found' })
   @ApiResponse({ status: 429, description: 'Too many AI requests' })
-  @ApiResponse({ status: 503, description: 'AI service unavailable' })
-  @ApiResponse({ status: 504, description: 'AI service timeout' })
-  async analyzeProgress(@Body() dto: AnalyzeProgressDto) {
-    return this.aiService.analyzeProgress(dto);
+  async analyzeProgress(@Body() dto: AnalyzeProgressDto): Promise<AiJobAccepted> {
+    const job = await this.aiQueue.add('analyze-progress', dto);
+    return { jobId: String(job.id), status: 'pending' };
   }
 
   @Post('suggest-assignee')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'AI gợi ý người thực hiện task' })
-  @ApiResponse({
-    status: 200,
-    description: 'Danh sách gợi ý người thực hiện',
-    schema: {
-      example: {
-        suggestions: [{ userId: 'clxx...', reason: 'Workload thấp nhất', currentWorkload: 2 }],
-      },
-    },
-  })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'AI gợi ý người thực hiện task — async, poll GET /ai/jobs/:jobId' })
+  @ApiResponse({ status: 202, description: 'Job đã được nhận' })
   @ApiResponse({ status: 400, description: 'Required fields missing' })
-  @ApiResponse({ status: 404, description: 'Task not found' })
   @ApiResponse({ status: 429, description: 'Too many AI requests' })
-  @ApiResponse({ status: 503, description: 'AI service unavailable' })
-  @ApiResponse({ status: 504, description: 'AI service timeout' })
-  async suggestAssignee(@Body() dto: SuggestAssigneeDto) {
-    return this.aiService.suggestAssignee(dto);
+  async suggestAssignee(@Body() dto: SuggestAssigneeDto): Promise<AiJobAccepted> {
+    const job = await this.aiQueue.add('suggest-assignee', dto);
+    return { jobId: String(job.id), status: 'pending' };
   }
 
   @Post('code-assist')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'AI hỗ trợ kỹ thuật — trả về hướng dẫn markdown' })
-  @ApiResponse({
-    status: 200,
-    description: 'Hướng dẫn kỹ thuật chi tiết dạng markdown',
-    schema: {
-      example: {
-        instruction: '## JWT Authentication\n\n### Tổng quan...',
-      },
-    },
-  })
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'AI hỗ trợ kỹ thuật — async, poll GET /ai/jobs/:jobId' })
+  @ApiResponse({ status: 202, description: 'Job đã được nhận' })
   @ApiResponse({ status: 400, description: 'prompt is required' })
   @ApiResponse({ status: 429, description: 'Too many AI requests' })
-  @ApiResponse({ status: 503, description: 'AI service unavailable' })
-  @ApiResponse({ status: 504, description: 'AI service timeout' })
-  async codeAssist(@Body() dto: CodeAssistDto) {
-    return this.aiService.codeAssist(dto);
+  async codeAssist(@Body() dto: CodeAssistDto): Promise<AiJobAccepted> {
+    const job = await this.aiQueue.add('code-assist', dto);
+    return { jobId: String(job.id), status: 'pending' };
   }
 }

@@ -8,11 +8,11 @@ See: .context/PROJECT.md
 
 ## Current Position
 
-Phase: Production Scale Phase 4 (Redis + Socket.IO Adapter) — DONE
+Phase: Production Scale Phase 5 (BullMQ Background Jobs) — DONE
 Branch: `main` (code truc tiep tren main)
 Status: MVP complete; production-grade cleanup/restructure in progress
-Last activity: 2026-05-20 — Phase 4 Redis foundation + OTP via Redis
-Progress: MVP [####################] 100%; Production cleanup Phase 4 done
+Last activity: 2026-05-20 — Phase 5 BullMQ for email/notifications/AI + async AI contract
+Progress: MVP [####################] 100%; Production cleanup Phase 5 done
 
 ## What's Done (Summary)
 
@@ -53,8 +53,8 @@ Progress: MVP [####################] 100%; Production cleanup Phase 4 done
 
 ## What's Next
 
-- Phase 5: BullMQ for email/notifications/AI
-- Then Phase 6: Soft delete + admin trash
+- Phase 6: Soft delete + admin trash
+- Then Phase 7: ts-rest contracts pilot (Notifications)
 
 ## Known Warnings (non-blocking)
 
@@ -67,26 +67,24 @@ Progress: MVP [####################] 100%; Production cleanup Phase 4 done
 
 ### 2026-05-20
 
+- Phase 5: added QueueModule (Bull root) + 3 queues (email, notifications, ai)
+- Email processor in EmailModule; notifications processor in NotificationsModule; AI processor in AiModule
+- AuthService/WorkspacesService enqueue `send-mail` jobs (4 callsites); OTP/reset/verify/invite
+- TasksService/CommentsService enqueue `emit-workspace`/`emit-user` (6 callsites); no direct gateway calls
+- AI endpoints now return `{ jobId, status: 'pending' }` (HTTP 202); FE uses `useAiJob` + polling `GET /ai/jobs/:jobId` (1.5s interval)
+- New AiJobsController + AiStreamingIndicator (basic)
+- Verified: OTP enqueue → mailpit captures (OTP visible), bull:email:completed has the job
 - Phase 4: added RedisModule (global, ioredis), RedisIoAdapter for Socket.IO scaling
 - Auth CacheModule swapped to cache-manager-ioredis-yet (OTP survives restart)
 - docker-compose.yml: added redis:7-alpine + mailpit + explicit bridge network
 - docker-compose.prod.yml + Caddyfile skeleton (finalized in Phase 11)
 - Verified: typecheck, build, /health, OTP smoke (Redis key + 296s TTL)
-- Phase 3: added 9 hot-path indexes (Task, Project, Comment, Attachment, ChecklistItem, Activity, Notification, WorkspaceMember)
-- Squashed 4 dev migrations into single `20260520111322_baseline` (no prod data; clean slate)
-- Backed up local dev DB to `database/devteamos_dump.sql` (gitignored) before reset
-- Added `MIGRATIONS.md` at repo root: policy, backup/restore, destructive guard rules
+- Phase 3: 9 hot-path indexes; squashed 4 dev migrations → `20260520111322_baseline`; backup at `database/devteamos_dump.sql` (gitignored); `MIGRATIONS.md` at root
 
 ### 2026-05-15
 
-- Phase 2: added nestjs-pino request logging + Sentry API/web init
-- Added Sentry exception filter for non-HttpException capture
-- Replaced API console logs in bootstrap/tasks/comments with Nest Logger
-- Verified pnpm -r typecheck, pnpm -r build, and /health smoke pass
-- Phase 1: added packages/config-typescript, config-eslint, contracts, ui, utils
-- Wired API/web tsconfig + ESLint to shared config packages
-- Merged packages/shared content into packages/contracts and removed packages/shared
-- Verified pnpm -r typecheck and pnpm -r build pass
+- Phase 2: nestjs-pino + Sentry (API/web init + non-HttpException filter); replaced bootstrap/tasks/comments console logs
+- Phase 1: added packages/config-typescript, config-eslint, contracts, ui, utils; merged shared → contracts; wired API/web extends
 
 ---
 

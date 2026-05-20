@@ -6,11 +6,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectQueue } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { randomBytes } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PrismaService } from '@/prisma/prisma.service';
-import { EmailService } from '../email/email.service';
+import type { SendMailPayload } from '../email/email.processor';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from './dto/update-workspace.dto';
 import { InviteMemberDto } from './dto/invite-member.dto';
@@ -22,8 +24,8 @@ const UPLOADS_URL_PREFIX = '/uploads/';
 export class WorkspacesService {
   constructor(
     private prisma: PrismaService,
-    private emailService: EmailService,
     private configService: ConfigService,
+    @InjectQueue('email') private emailQueue: Queue<SendMailPayload>,
   ) {}
 
   async create(userId: string, dto: CreateWorkspaceDto) {
@@ -193,13 +195,13 @@ export class WorkspacesService {
       },
     });
 
-    // Send invitation email
+    // Enqueue invitation email
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const inviteUrl = `${frontendUrl}/invite/${token}`;
-    await this.emailService.sendMail(
-      dto.email,
-      `Moi tham gia workspace "${workspace.name}" - DevTeamOS`,
-      `
+    await this.emailQueue.add('send-invitation', {
+      to: dto.email,
+      subject: `Moi tham gia workspace "${workspace.name}" - DevTeamOS`,
+      html: `
         <h2>Ban duoc moi tham gia workspace!</h2>
         <p>Ban da duoc moi tham gia workspace "<strong>${workspace.name}</strong>" tren DevTeamOS.</p>
         <a href="${inviteUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:6px;">
@@ -207,7 +209,7 @@ export class WorkspacesService {
         </a>
         <p>Link nay se het han sau 7 ngay.</p>
       `,
-    );
+    });
 
     return { message: 'Invitation sent successfully' };
   }

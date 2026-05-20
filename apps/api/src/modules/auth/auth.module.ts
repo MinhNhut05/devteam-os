@@ -2,6 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { redisStore } from 'cache-manager-ioredis-yet';
 import { AuthController } from './auth.controller';
@@ -52,6 +53,8 @@ import { UsersModule } from '../users/users.module';
 
     // Import UsersModule so AuthService can use UsersService
     UsersModule,
+
+    BullModule.registerQueue({ name: 'email' }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy],

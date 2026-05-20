@@ -12,9 +12,12 @@ import * as bcrypt from 'bcrypt';
 import { randomBytes, createHash, randomInt } from 'crypto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { InjectQueue } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { EmailService } from '../email/email.service';
+import type { SendMailPayload } from '../email/email.processor';
 import { SendOtpDto } from './dto/send-otp.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
@@ -33,6 +36,7 @@ export class AuthService {
     private usersService: UsersService,
     private emailService: EmailService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @InjectQueue('email') private emailQueue: Queue<SendMailPayload>,
   ) {}
 
   async sendOtp(dto: SendOtpDto) {
@@ -61,12 +65,11 @@ export class AuthService {
       attemptsLeft: 5,
     }, OTP_TTL_MS);
 
-    // Gui email OTP
-    try {
-      await this.emailService.sendMail(
-        email,
-        'Ma xac thuc OTP - DevTeamOS',
-        `
+    // Enqueue OTP email (background, with retries)
+    await this.emailQueue.add('send-otp', {
+      to: email,
+      subject: 'Ma xac thuc OTP - DevTeamOS',
+      html: `
           <h2>Chao mung ban den voi DevTeamOS!</h2>
           <p>Ma xac thuc cua ban la:</p>
           <div style="font-size:32px;font-weight:bold;letter-spacing:8px;text-align:center;padding:16px;background:#f3f4f6;border-radius:8px;margin:16px 0;">
@@ -75,11 +78,7 @@ export class AuthService {
           <p>Ma nay se het han sau 5 phut.</p>
           <p>Neu ban khong dang ky tai khoan, vui long bo qua email nay.</p>
         `,
-      );
-    } catch (error) {
-      this.logger.error(`Failed to send OTP email to ${email}`, error.message);
-      throw new BadRequestException('Khong the gui email OTP. Vui long thu lai.');
-    }
+    });
 
     return { message: 'Ma OTP da duoc gui den email cua ban' };
   }
@@ -356,11 +355,10 @@ export class AuthService {
       const frontendUrl = this.configService.get<string>('FRONTEND_URL');
       const resetUrl = `${frontendUrl}/reset-password/${token}`;
 
-      try {
-        await this.emailService.sendMail(
-          email,
-          'Dat lai mat khau - DevTeamOS',
-          `
+      await this.emailQueue.add('send-reset', {
+        to: email,
+        subject: 'Dat lai mat khau - DevTeamOS',
+        html: `
             <h2>Dat lai mat khau</h2>
             <p>Ban da yeu cau dat lai mat khau. Click vao link ben duoi:</p>
             <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:6px;">
@@ -369,10 +367,7 @@ export class AuthService {
             <p>Link nay se het han sau 1 gio.</p>
             <p>Neu ban khong yeu cau dat lai mat khau, vui long bo qua email nay.</p>
           `,
-        );
-      } catch (error) {
-        this.logger.error(`Failed to send reset email to ${email}`, error.message);
-      }
+      });
     }
 
     return { message: 'Neu email ton tai, ban se nhan duoc email huong dan' };
@@ -544,11 +539,10 @@ export class AuthService {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
     const verifyUrl = `${frontendUrl}/verify-email/${token}`;
 
-    try {
-      await this.emailService.sendMail(
-        normalizedEmail,
-        'Xac thuc email - DevTeamOS',
-        `
+    await this.emailQueue.add('send-verification', {
+      to: normalizedEmail,
+      subject: 'Xac thuc email - DevTeamOS',
+      html: `
           <h2>Xac thuc email cua ban</h2>
           <p>Click vao link ben duoi de xac thuc email:</p>
           <a href="${verifyUrl}" style="display:inline-block;padding:12px 24px;background:#6366f1;color:#fff;text-decoration:none;border-radius:6px;">
@@ -556,10 +550,7 @@ export class AuthService {
           </a>
           <p>Link nay se het han sau 24 gio.</p>
         `,
-      );
-    } catch (error) {
-      this.logger.error(`Failed to send verification email to ${normalizedEmail}`, error.message);
-    }
+    });
 
     return { message: 'Neu email ton tai va chua xac thuc, ban se nhan duoc email' };
   }

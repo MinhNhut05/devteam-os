@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
+import { QueueModule } from './queue/queue.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
@@ -40,6 +41,7 @@ import { createPinoLoggerOptions } from './observability/pino-options';
     ]),
     PrismaModule,
     RedisModule.forRoot(),
+    QueueModule,
     EmailModule,
     AuthModule,
     UsersModule,

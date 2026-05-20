@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AiController } from './ai.controller';
+import { AiJobsController } from './ai-jobs.controller';
 import { AiService } from './ai.service';
+import { AiProcessor } from './ai.processor';
 
 @Module({
   imports: [
@@ -18,8 +21,17 @@ import { AiService } from './ai.service';
         },
       }),
     }),
+    BullModule.registerQueue({
+      name: 'ai',
+      defaultJobOptions: {
+        // AI calls are expensive — do not auto-retry on failure (caller can re-dispatch)
+        attempts: 1,
+        removeOnComplete: { age: 3600 },
+        removeOnFail: { age: 3600 },
+      },
+    }),
   ],
-  controllers: [AiController],
-  providers: [AiService],
+  controllers: [AiController, AiJobsController],
+  providers: [AiService, AiProcessor],
 })
 export class AiModule {}
