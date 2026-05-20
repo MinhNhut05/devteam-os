@@ -1,0 +1,72 @@
+# Production overlay. Use with:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Phase 4 establishes the skeleton; Phase 11 finalizes (Dockerfile build context,
+# GHCR image refs, env_file wiring, healthcheck-gated rollout).
+
+services:
+  postgres:
+    restart: always
+    # In production, do not expose postgres on host
+    ports: []
+    networks:
+      - devteamos-internal
+
+  redis:
+    restart: always
+    ports: []
+    networks:
+      - devteamos-internal
+
+  mailpit:
+    # Mailpit is dev-only — disable in prod by giving it a no-op profile
+    profiles: ['dev-only']
+
+  api:
+    image: ghcr.io/minhnhut05/devteamos-api:latest
+    container_name: devteamos-api
+    restart: always
+    env_file:
+      - path: ./.env.production
+        required: false
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - devteamos-internal
+      - devteamos-edge
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:3001/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: devteamos-caddy
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./apps/web/dist:/srv/web:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+    networks:
+      - devteamos-edge
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  devteamos-internal:
+    driver: bridge
+  devteamos-edge:
+    driver: bridge

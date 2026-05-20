@@ -11,11 +11,47 @@ services:
       - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - devteamos
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U devteamos']
       interval: 10s
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: devteamos-redis
+    restart: unless-stopped
+    command: ['redis-server', '--appendonly', 'yes']
+    # If host has Redis/Valkey on 6379, either stop it or rebind to '6380:6379'
+    # and set REDIS_URL=redis://localhost:6380 in apps/api/.env.
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - devteamos
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: devteamos-mailpit
+    restart: unless-stopped
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    networks:
+      - devteamos
+
 volumes:
   postgres_data:
+  redis_data:
+
+networks:
+  devteamos:
+    driver: bridge

@@ -35,6 +35,7 @@
 | 2026-05-15 | Tach workspace packages @devteamos/{config-typescript,config-eslint,contracts,ui,utils} | Giam drift BE/FE va chuan bi ts-rest/UI reuse, nhung van export TS source truc tiep de tranh build step som | Phase 1 tao package moi, apps extend shared configs, packages/shared duoc merge vao contracts roi xoa |
 | 2026-05-15 | Pino lam Nest logger chinh + Sentry capture non-HttpException | Can JSON logs co request id va production error tracking, nhung khong doi response format HTTPException hien co | Phase 2 them nestjs-pino, @sentry/node, @sentry/react; SENTRY_DSN rong thi capture disabled |
 | 2026-05-20 | Squash 4 dev migrations vao single baseline + add hot-path indexes trong cung 1 file | Chua co prod data, history cu lon xon (init, init_schema, auth fixes, image), va Phase 3 muon them 9 indexes — gop lai cho clean slate truoc khi tien xa hon | Migration `20260520111322_baseline` chua full schema + 9 indexes; future squashes khong con free khi prod data lan dau |
+| 2026-05-20 | Redis lam shared infra: 1 ioredis client cho cache + Socket.IO adapter + (sau) BullMQ | Tranh nhieu connections rieng le; `maxRetriesPerRequest: null` + `enableReadyCheck: false` la yeu cau cua BullMQ Phase 5; cache-manager-ioredis-yet giu API CacheModule khong doi (OTP code khong sua) | RedisModule global expose REDIS_CLIENT; main.ts conditionally wire RedisIoAdapter khi REDIS_URL co; OTP cache fallback in-memory neu thieu REDIS_URL |
 
 ---
 

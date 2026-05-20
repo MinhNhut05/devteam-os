@@ -3,10 +3,13 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { RequestMethod, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import type Redis from 'ioredis';
 import { Logger as PinoNestLogger } from 'nestjs-pino';
 import { join } from 'path';
 import { AppModule } from './app.module';
 import { initSentry } from './observability/sentry';
+import { REDIS_CLIENT } from './redis/redis.module';
+import { RedisIoAdapter } from './modules/notifications/redis-io.adapter';
 
 async function bootstrap() {
   initSentry();
@@ -45,6 +48,14 @@ async function bootstrap() {
   app.setGlobalPrefix('api', {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
+
+  // Socket.IO Redis adapter (only when REDIS_URL is configured)
+  const redis = app.get<Redis | null>(REDIS_CLIENT, { strict: false });
+  if (redis) {
+    const ioAdapter = new RedisIoAdapter(app, redis);
+    await ioAdapter.connectToRedis();
+    app.useWebSocketAdapter(ioAdapter);
+  }
 
   // Swagger documentation
   const config = new DocumentBuilder()

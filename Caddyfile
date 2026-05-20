@@ -1,0 +1,42 @@
+# DevTeamOS reverse proxy.
+# Caddy auto-provisions Let's Encrypt TLS for the public domains below.
+# Replace `devteamos.example.com` and `api.devteamos.example.com` with real domains in Phase 11.
+
+# Frontend — static SPA built by `apps/web` (Vite output mounted at /srv/web)
+devteamos.example.com {
+	root * /srv/web
+	encode gzip zstd
+	try_files {path} /index.html
+	file_server
+
+	# Security headers
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# CSP intentionally permissive at this stage; tighten in Phase 11
+	}
+}
+
+# Backend — NestJS API + Socket.IO upgrade
+api.devteamos.example.com {
+	encode gzip zstd
+
+	# WebSocket / Socket.IO upgrade
+	@websocket {
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	reverse_proxy @websocket api:3001
+
+	# Regular HTTP API
+	reverse_proxy api:3001 {
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+	}
+}

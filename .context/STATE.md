@@ -8,11 +8,11 @@ See: .context/PROJECT.md
 
 ## Current Position
 
-Phase: Production Scale Phase 3 (DB Hardening) — DONE
+Phase: Production Scale Phase 4 (Redis + Socket.IO Adapter) — DONE
 Branch: `main` (code truc tiep tren main)
 Status: MVP complete; production-grade cleanup/restructure in progress
-Last activity: 2026-05-20 — Phase 3 indexes + baseline migration squash
-Progress: MVP [####################] 100%; Production cleanup Phase 3 done
+Last activity: 2026-05-20 — Phase 4 Redis foundation + OTP via Redis
+Progress: MVP [####################] 100%; Production cleanup Phase 4 done
 
 ## What's Done (Summary)
 
@@ -53,8 +53,8 @@ Progress: MVP [####################] 100%; Production cleanup Phase 3 done
 
 ## What's Next
 
-- Phase 4: Redis + Socket.IO adapter
-- Then Phase 5: BullMQ for email/notifications/AI
+- Phase 5: BullMQ for email/notifications/AI
+- Then Phase 6: Soft delete + admin trash
 
 ## Known Warnings (non-blocking)
 
@@ -67,11 +67,15 @@ Progress: MVP [####################] 100%; Production cleanup Phase 3 done
 
 ### 2026-05-20
 
+- Phase 4: added RedisModule (global, ioredis), RedisIoAdapter for Socket.IO scaling
+- Auth CacheModule swapped to cache-manager-ioredis-yet (OTP survives restart)
+- docker-compose.yml: added redis:7-alpine + mailpit + explicit bridge network
+- docker-compose.prod.yml + Caddyfile skeleton (finalized in Phase 11)
+- Verified: typecheck, build, /health, OTP smoke (Redis key + 296s TTL)
 - Phase 3: added 9 hot-path indexes (Task, Project, Comment, Attachment, ChecklistItem, Activity, Notification, WorkspaceMember)
 - Squashed 4 dev migrations into single `20260520111322_baseline` (no prod data; clean slate)
 - Backed up local dev DB to `database/devteamos_dump.sql` (gitignored) before reset
 - Added `MIGRATIONS.md` at repo root: policy, backup/restore, destructive guard rules
-- Verified pnpm -r typecheck, pnpm -r build, /health smoke pass
 
 ### 2026-05-15
 
@@ -83,12 +87,6 @@ Progress: MVP [####################] 100%; Production cleanup Phase 3 done
 - Wired API/web tsconfig + ESLint to shared config packages
 - Merged packages/shared content into packages/contracts and removed packages/shared
 - Verified pnpm -r typecheck and pnpm -r build pass
-
-### 2026-05-14
-
-- Phase 0A: updated gitignore, moved legacy test-api script, archived closed branch contexts
-- Phase 0B: added typecheck scripts, standardized dev port 3001, added /health endpoint
-- Started production-scale cleanup/restructure plan; next is Phase 1 monorepo packages
 
 ---
 
