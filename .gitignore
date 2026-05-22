@@ -54,18 +54,18 @@ database/
 LEARNSTART.md
 AI_TASK_INSTRUCTION.md
 
-# Claude Code / AMP Code
-.claude/*
-!.claude/rules/
-!.claude/hooks/
-!.claude/skills/
-!.claude/agents/
-!.claude/settings.json
-.claude/audit.log
-.agents/*
-!.agents/skills/
-!.agents/skills/**
+# Claude Code / AMP Code (all internal AI tooling — local only)
+.claude/
+.agents/
 memory/
+
+# Internal planning & onboarding docs (local only)
+.context/
+CLAUDE.md
+AGENTS.md
+
+# Legacy scripts (kept locally for reference)
+scripts/legacy/
 
 # Branch agent docs (chi dung local, khong push — tru .context/branches/)
 /branches/
